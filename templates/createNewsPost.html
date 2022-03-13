@@ -1,0 +1,63 @@
+{% block head %}
+<title>Criar</title>
+{% endblock %} {% extends 'base.html' %} {% block content %}
+<h1>Criar Noticias</h1>
+
+<div class="modal" id="createModal" style="visibility: hidden">
+	Criar?
+	<button onclick="cancel()">Cancelar</button>
+	<button onclick="createNews()">Sim</button>
+</div>
+
+<!-- <form> -->
+<div class="form">
+	<h3>Titulo</h3>
+	<input type="text" id="titulo" />
+	<h3>Assunto</h3>
+	<select id="assunto">
+		{% for subject in subjects %}
+		<option value="{{subject}}">{{subject}}</option>
+		{% endfor %}
+	</select>
+	<br />
+	<h3>Conteudo</h3>
+	<textarea id="conteudo" cols="50" rows="10"></textarea>
+	<br />
+	<button onclick="handleModal()">Criar</button>
+</div>
+<!-- </form> -->
+
+<script>
+	let toggleModal = false;
+
+	function controlModalVisibility() {
+		const element = document.getElementById("createModal");
+		element.style.visibility = toggleModal ? "visible" : "hidden";
+	}
+
+	function handleModal() {
+		toggleModal = !toggleModal;
+		controlModalVisibility();
+	}
+
+	function createNews() {
+		const titulo = document.getElementById("titulo").value;
+		const assunto = document.getElementById("assunto").value;
+		const conteudo = document.getElementById("conteudo").value;
+		const noticia = {
+			titulo: titulo,
+			assunto: assunto,
+			conteudo: conteudo,
+		};
+
+		console.log(noticia);
+	}
+
+	function cancel() {
+		document.getElementById("titulo").value = "";
+		document.getElementById("conteudo").value = "";
+		toggleModal = false;
+		controlModalVisibility();
+	}
+</script>
+{% endblock content %}

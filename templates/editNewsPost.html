@@ -1,0 +1,65 @@
+{% block head %}
+<title>Editar</title>
+{% endblock %} {% extends 'base.html' %} {% block content %}
+<h1>Editar Noticia</h1>
+
+<div class="modal" id="editModal" style="visibility: hidden">
+	Criar?
+	<button onclick="cancel()">Cancelar</button>
+	<button onclick="editNews()">Sim</button>
+</div>
+
+<div class="form">
+	<h3>Id</h3>
+	<input type="text" value="{{news.id}}" readonly />
+	<h3>Titulo</h3>
+	<input type="text" id="titulo" value="{{news.titulo}}" />
+	<h3>Assunto</h3>
+	<select id="assunto" value="{{news.assunto}}">
+		{% for subject in subjects %}
+		<option value="{{subject}}">{{subject}}</option>
+		{% endfor %}
+	</select>
+	<h3>Conteudo</h3>
+	<textarea id="conteudo" cols="30" rows="10">{{news.conteudo}}</textarea>
+	<br />
+	<button onclick="handleModal()">Editar</button>
+</div>
+
+<script>
+	let toggleModal = false;
+	const originalNews= {{news | tojson }}
+
+	function controlModalVisibility() {
+		const element = document.getElementById("editModal");
+		element.style.visibility = toggleModal ? "visible" : "hidden";
+	}
+
+	function handleModal() {
+		toggleModal = !toggleModal;
+		controlModalVisibility();
+	}
+
+	function editNews() {
+		const titulo = document.getElementById("titulo").value;
+		const assunto = document.getElementById("assunto").value;
+		const conteudo = document.getElementById("conteudo").value;
+		const noticia = {
+			titulo: titulo,
+			assunto: assunto,
+			conteudo: conteudo,
+		};
+
+		console.log(noticia);
+	}
+
+	function cancel() {
+		// const originalNews = {{news}}
+		document.getElementById("titulo").value = originalNews["titulo"];
+		document.getElementById("assunto").value = originalNews["assunto"];
+		document.getElementById("conteudo").value = originalNews["conteudo"];
+		toggleModal = false;
+		controlModalVisibility();
+	}
+</script>
+{% endblock content %}
