@@ -2,19 +2,19 @@
 Essa é a versão de ADM em que um usuario identificado pode criar, editar e excluir noticias.
 
 # Como rodar
-1. Instalar virtualenv
+1. Instalar virtualenv \
 pip install virtualenv
 
-1. Criar ambiente do virtualenv
+1. Criar ambiente do virtualenv \
 virtualenv myenv
 
-2. Ativar virtualenv
+2. Ativar virtualenv \
 .\myenv\Scripts\activate
 
-3. Instalar dependencias
+3. Instalar dependencias \
 pip install -r requirements.txt
 
-4. Rodar app
+4. Rodar app \
 python server.py
 
 # Requisitos Técnicos
