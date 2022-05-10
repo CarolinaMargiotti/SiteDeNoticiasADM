@@ -23,3 +23,6 @@ def editNews(postId):
     noticia = getNews()[postId]
     assuntos = getSubjects()
     return render_template("editNewsPost.html",news=noticia,subjects=assuntos)
+
+def login():
+    return render_template("login.html")

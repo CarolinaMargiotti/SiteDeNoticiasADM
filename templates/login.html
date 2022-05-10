@@ -1,0 +1,15 @@
+{% block head %}
+<title>Login</title>
+{% endblock %} {% extends 'base.html' %} {% block content %}
+<h1>Faça login</h1>
+<form action="post">
+    <label for="usuario">Nome</label>
+    <input type="text" name="usuario">
+    <br />
+    <label for="senha">Senha</label>
+    <input type="text" name="senha">
+    <br />
+    <input type="submit">
+</form>
+
+{% endblock content %}
