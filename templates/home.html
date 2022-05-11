@@ -4,59 +4,59 @@
 <h1>Todas noticias</h1>
 
 <div class="modal" id="deleteModal" style="visibility: hidden">
-	Excluir?
-	<div id="tituloNoticia"></div>
-	<button onclick="cancel()">Cancelar</button>
-	<button>Sim</button>
+  Excluir?
+  <div id="tituloNoticia"></div>
+  <button onclick="cancel()">Cancelar</button>
+  <button>Sim</button>
 </div>
 <br />
 <table>
-	<tr>
-		<th>ID</th>
-		<th>Titulo</th>
-		<th>Assunto</th>
-		<th>Conteudo</th>
-		<th>Editar</th>
-		<th>Excluir</th>
-	</tr>
-	{% for news in newsList %}
-	<tr>
-		<td>{{news.id}}</td>
-		<td>{{news.titulo}}</td>
-		<td>{{news.assunto}}</td>
-		<td>{{news.resumo}}</td>
-		<td>
-			<a href="{{url_for('news.editNews',postId=news.id)}}">Editar</a>
-		</td>
-		<!-- ignorar o erro-->
-		<td><button onclick="handleModal({{news}})">Excluir</button></td>
-	</tr>
-	{% endfor %}
+  <tr>
+    <th>ID</th>
+    <th>Titulo</th>
+    <th>Assunto</th>
+    <th>Conteudo</th>
+    <th>Editar</th>
+    <th>Excluir</th>
+  </tr>
+  {% for news in newsList %}
+  <tr>
+    <td>{{news.id}}</td>
+    <td>{{news.titulo}}</td>
+    <td>{{news.assunto}}</td>
+    <td>{{news.resumo}}</td>
+    <td>
+      <a href="{{url_for('news.editNews',postId=news.id)}}">Editar</a>
+    </td>
+    <!-- ignorar o erro-->
+    <td><button onclick="handleModal({{news}})">Excluir</button></td>
+  </tr>
+  {% endfor %}
 </table>
 
 <script>
-	let toggleModal = false;
-	let selectedNews = {};
+  let toggleModal = false;
+  let selectedNews = {};
 
-	function controlModalVisibility() {
-		const element = document.getElementById("deleteModal");
-		element.style.visibility = toggleModal ? "visible" : "hidden";
-	}
+  function controlModalVisibility() {
+    const element = document.getElementById("deleteModal");
+    element.style.visibility = toggleModal ? "visible" : "hidden";
+  }
 
-	function handleModal(news) {
-		selectedNews = news;
-		const element = document.getElementById("deleteModal");
-		const titulo = document.getElementById("tituloNoticia");
-		titulo.innerText = selectedNews.titulo;
+  function handleModal(news) {
+    selectedNews = news;
+    const element = document.getElementById("deleteModal");
+    const titulo = document.getElementById("tituloNoticia");
+    titulo.innerText = selectedNews.titulo;
 
-		toggleModal = !toggleModal;
-		controlModalVisibility();
-		controlModalVisibility;
-	}
+    toggleModal = !toggleModal;
+    controlModalVisibility();
+    controlModalVisibility;
+  }
 
-	function cancel() {
-		toggleModal = false;
-		controlModalVisibility();
-	}
+  function cancel() {
+    toggleModal = false;
+    controlModalVisibility();
+  }
 </script>
 {% endblock content %}

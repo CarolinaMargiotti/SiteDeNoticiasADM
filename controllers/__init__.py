@@ -13,7 +13,6 @@ news_bp = Blueprint("news",__name__,template_folder=template_dir)
 @news_bp.route("/")
 def home():
     # if user is logged, else
-    return login_user()
     return news_home()
 
 @news_bp.route("/create")
