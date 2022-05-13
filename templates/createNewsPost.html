@@ -3,61 +3,102 @@
 {% endblock %} {% extends 'base.html' %} {% block content %}
 <h1>Criar Noticias</h1>
 
-<div class="modal" id="createModal" style="visibility: hidden">
-	Criar?
-	<button onclick="cancel()">Cancelar</button>
-	<button onclick="createNews()">Sim</button>
+<div class="warnings">
+  <label id="creationWarning" style="color: seagreen"></label>
+  <label id="failureWarning" style="color: red"></label>
 </div>
 
-<!-- <form> -->
-<div class="form">
-	<h3>Titulo</h3>
-	<input type="text" id="titulo" />
-	<h3>Assunto</h3>
-	<select id="assunto">
-		{% for subject in subjects %}
-		<option value="{{subject}}">{{subject}}</option>
-		{% endfor %}
-	</select>
-	<br />
-	<h3>Conteudo</h3>
-	<textarea id="conteudo" cols="50" rows="10"></textarea>
-	<br />
-	<button onclick="handleModal()">Criar</button>
+<div class="modal" id="createModal" style="visibility: hidden">
+  Criar?
+  <button onclick="cancel()">Cancelar</button>
+  <button onclick="createNews()">Sim</button>
 </div>
-<!-- </form> -->
+<button onclick="cancel()">Limpar</button>
+<div class="form">
+  <h3>Titulo</h3>
+  <input type="text" id="titulo" />
+  <h3>Assunto</h3>
+  <select id="assunto">
+    {% for subject in subjects %}
+    <option value="{{subject}}">{{subject}}</option>
+    {% endfor %}
+  </select>
+  <h3>Categoria</h3>
+  <input id="categoria" type="text" />
+  <br />
+  <h3>Resumo</h3>
+  <textarea id="resumo" cols="30" rows="10"></textarea>
+  <h3>Conteudo</h3>
+  <textarea id="conteudo" cols="50" rows="10"></textarea>
+  <br />
+  <button onclick="handleModal()">Criar</button>
+</div>
 
 <script>
-	let toggleModal = false;
+  let toggleModal = false;
 
-	function controlModalVisibility() {
-		const element = document.getElementById("createModal");
-		element.style.visibility = toggleModal ? "visible" : "hidden";
-	}
+  function controlModalVisibility() {
+    const element = document.getElementById("createModal");
+    element.style.visibility = toggleModal ? "visible" : "hidden";
+  }
 
-	function handleModal() {
-		toggleModal = !toggleModal;
-		controlModalVisibility();
-	}
+  function handleModal() {
+    toggleModal = !toggleModal;
+    controlModalVisibility();
+  }
 
-	function createNews() {
-		const titulo = document.getElementById("titulo").value;
-		const assunto = document.getElementById("assunto").value;
-		const conteudo = document.getElementById("conteudo").value;
-		const noticia = {
-			titulo: titulo,
-			assunto: assunto,
-			conteudo: conteudo,
-		};
+  function setWarningError() {
+    const failureWarningElement = document.getElementById("failureWarning");
+    failureWarningElement.innerHTML = "Houve um erro: " + event;
+  }
 
-		console.log(noticia);
-	}
+  function unsetEverything() {
+    const creationWarningElement = document.getElementById("creationWarning");
+    creationWarningElement.innerHTML = "";
+    const failureWarningElement = document.getElementById("failureWarning");
+    failureWarningElement.innerHTML = "";
+  }
 
-	function cancel() {
-		document.getElementById("titulo").value = "";
-		document.getElementById("conteudo").value = "";
-		toggleModal = false;
-		controlModalVisibility();
-	}
+  function createNews() {
+    this.unsetEverything();
+    const titulo = document.getElementById("titulo").value;
+    const assunto = document.getElementById("assunto").value;
+    const categoria = document.getElementById("categoria").value;
+    const conteudo = document.getElementById("conteudo").value;
+    const resumo = document.getElementById("resumo").value;
+
+    const url = `http://127.0.0.1:8080/createnews?titulo=${titulo}&assunto=${assunto}&categoria=${categoria}&conteudo=${conteudo}&resumo=${resumo}`;
+    let xhr = new XMLHttpRequest();
+    xhr.open("post", url);
+    xhr.responseType = "json";
+    xhr.send();
+
+    xhr.onload = (event) => {
+      if (xhr.status !== 200) {
+        this.setWarningError();
+      } else {
+        toggleModal = false;
+        controlModalVisibility();
+        const creationWarningElement =
+          document.getElementById("creationWarning");
+        creationWarningElement.innerHTML = "Criado com sucesso";
+      }
+    };
+
+    xhr.onerror = (event) => {
+      this.setWarningError();
+    };
+  }
+
+  function cancel() {
+    document.getElementById("titulo").value = "";
+    document.getElementById("assunto").value = "";
+    document.getElementById("categoria").value = "";
+    document.getElementById("conteudo").value = "";
+    document.getElementById("resumo").value = "";
+    toggleModal = false;
+    this.unsetEverything();
+    controlModalVisibility();
+  }
 </script>
 {% endblock content %}

@@ -1,9 +1,12 @@
-from flask import request, jsonify, render_template
+from flask import  jsonify, render_template
 from models.news import news as noticias
+import requests
 
 assuntos = ['pets','arte','geek']
 
 def getNews():
+    response = requests.get("http://127.0.0.1:8080/getallnews?startNumber=1&quantity=10")
+    print(response)
     return noticias
 
 def getSubjects():
