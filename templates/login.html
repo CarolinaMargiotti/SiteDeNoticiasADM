@@ -3,46 +3,44 @@
 {% endblock %} {% extends 'base.html' %} {% block content %}
 <h1>Faça login</h1>
 <form>
-  <label for="usuario">Nome</label>
-  <input type="text" name="usuario" id="usuario" />
-  <br />
-  <label for="senha">Senha</label>
-  <input type="password" name="senha" id="senha" />
-  <br />
-  <input type="button" value="Logar" onclick="onLogin()" />
+	<label for="usuario">Nome</label>
+	<input type="text" name="usuario" id="usuario" />
+	<br />
+	<label for="senha">Senha</label>
+	<input type="password" name="senha" id="senha" />
+	<br />
+	<input type="button" value="Logar" onclick="onLogin()" />
 </form>
 <label id="mensagemErro" style="color: red"></label>
 
 <script>
-  function setMensagemErro(erro) {
-    const element = document.getElementById("mensagemErro");
-    element.innerHTML = `Ouve um erro: ${erro}`;
-  }
+	function setMensagemErro() {
+		const element = document.getElementById("mensagemErro");
+		element.innerHTML = `Não foi possivel realizar o login, cheque suas informações`;
+	}
 
-  async function onLogin() {
-    const usuario = document.getElementById("usuario").value;
-    const senha = document.getElementById("senha").value;
-    try {
-      let response = await fetch(
-        `http://127.0.0.1:8080/login?user=${usuario}&password=${senha}`,
-        {
-          mode: "no-cors",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json;charset=utf-8",
-            "Access-Control-Allow-Origin": "*",
-          },
-        }
-      );
-      if (response.ok) {
-        document.cookie = `user=${usuario}`;
-        window.location = "http://127.0.0.1:5000/";
-      } else {
-        setMensagemErro("erro inesperado");
-      }
-    } catch (error) {
-      setMensagemErro(error);
-    }
-  }
+	async function onLogin() {
+		const usuario = document.getElementById("usuario").value;
+		const senha = document.getElementById("senha").value;
+		const url = `http://127.0.0.1:8080/login?user=${usuario}&password=${senha}`;
+
+		let xhr = new XMLHttpRequest();
+		xhr.open("post", url);
+		xhr.responseType = "json";
+		xhr.send();
+
+		xhr.onload = (event) => {
+			if (xhr.status !== 200) {
+				setMensagemErro();
+			} else {
+				document.cookie = `user=${usuario}`;
+				window.location = "http://127.0.0.1:5000/";
+			}
+		};
+
+		xhr.onerror = (event) => {
+			setMensagemErro();
+		};
+	}
 </script>
 {% endblock content %}
