@@ -65,7 +65,9 @@
 		const conteudo = document.getElementById("conteudo").value;
 		const resumo = document.getElementById("resumo").value;
 
-		const url = `http://127.0.0.1:8080/createnews?titulo=${titulo}&assunto=${assunto}&conteudo=${conteudo}&resumo=${resumo}`;
+		const baseUrl = "http://127.0.0.1:8080";
+
+		const url = `${baseUrl}/createnews?titulo=${titulo}&assunto=${assunto}&conteudo=${conteudo}&resumo=${resumo}`;
 		let xhr = new XMLHttpRequest();
 		xhr.open("post", url);
 		xhr.responseType = "json";

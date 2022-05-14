@@ -7,9 +7,8 @@
 	Excluir?
 	<div id="tituloNoticia"></div>
 	<button onclick="cancel()">Cancelar</button>
-	<button>Sim</button>
+	<button onclick="deleteNews()">Sim</button>
 </div>
-{{subjects['1']}}
 <br />
 <table>
 	<tr>
@@ -53,6 +52,29 @@
 		toggleModal = !toggleModal;
 		controlModalVisibility();
 		controlModalVisibility;
+	}
+
+	function deleteNews() {
+		const baseUrl = "http://127.0.0.1:8080";
+
+		const url = `${baseUrl}/deletenews?id=${selectedNews.id}`;
+		let xhr = new XMLHttpRequest();
+		xhr.open("post", url);
+		xhr.responseType = "json";
+		xhr.send();
+
+		xhr.onload = (event) => {
+			if (xhr.status !== 200) {
+				alert("erro");
+			} else {
+				toggleModal = false;
+				window.location = "http://127.0.0.1:5000/";
+			}
+		};
+
+		xhr.onerror = (event) => {
+			alert("erro");
+		};
 	}
 
 	function cancel() {
