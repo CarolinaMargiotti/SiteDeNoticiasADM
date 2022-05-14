@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, current_app
+from flask import Blueprint, current_app,request
 
 from controllers.news_controller import home as news_home
 from controllers.news_controller import createNews as news_create
@@ -12,8 +12,12 @@ news_bp = Blueprint("news",__name__,template_folder=template_dir)
 
 @news_bp.route("/")
 def home():
+    req = request.args
+    startNumber = req.get("startNumber",1)
+    limit = req.get("limit",10)
+
     # if user is logged, else
-    return news_home()
+    return news_home(startNumber,limit)
 
 @news_bp.route("/create")
 def createNews():

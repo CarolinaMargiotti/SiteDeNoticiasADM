@@ -1,23 +1,26 @@
 # SiteDeNoticias
+
 Essa é a versão de ADM em que um usuario identificado pode criar, editar e excluir noticias.
 
 # Como rodar
+
 1. Instalar virtualenv \
-pip install virtualenv
+   pip install virtualenv
 
 1. Criar ambiente do virtualenv \
-virtualenv myenv
+   virtualenv myenv
 
-2. Ativar virtualenv \
-.\myenv\Scripts\activate
+1. Ativar virtualenv \
+   .\myenv\Scripts\activate
 
-3. Instalar dependencias \
-pip install -r requirements.txt
+1. Instalar dependencias \
+   pip install -r requirements.txt
 
-4. Rodar app \
-python server.py
+1. Rodar app \
+   python server.py
 
 # Requisitos Técnicos
+
 1. Utilizar linguagem de programação Python (versão 3.6 ou superior) no back end;
 2. Utilizar SQLAlchemy (1.2.19 ou superior) para persistência de dados;
 3. Utilizar Jinja 2 ou similar para geração de páginas dinâmicas (tipo template);
@@ -30,17 +33,19 @@ python server.py
 10. Utilizar o GitHub Actions para exemplificar a integração contínua (CI) do sistema.
 
 # Requisitos Funcionais
-1. Qualquer usuário pode visualizar as notícias associadas a uma categoria ao acessar a interface correspondente (ex. um menu de navegação).
+
+1. Qualquer usuário pode visualizar as notícias associadas a um assunto ao acessar a interface correspondente (ex. um menu de navegação).
 2. Somente um usuário administrador (único) deve ser capaz de cadastrar, excluir ou alterar as notícias.
 3. O usuário administrador (único) deve acessar a interface administrativa somente após ter sido autenticado, não havendo uma rota diretamente acessível sem o procedimento de autenticação.
-3. Cada notícia deve possuir (no mínimo):
-- Um assunto (ex. esporte, política, etc.)
-- Um título
-- Um conteúdo.
+4. Cada notícia deve possuir (no mínimo):
+
+-   Um assunto (ex. esporte, política, etc.)
+-   Um título
+-   Um conteúdo.
+
 4. Sua aplicação web deve conter um menu para navegação e, no mínimo, três interfaces distintas com o usuário, acessíveis a partir do menu.
 
-
-
 # Requisitos Não Funcionais
+
 1. A aplicação que faz a leitura das notícias e mostra para o usuário deve fazê-lo a partir de requisições à API do serviço de acesso às notícias.
 2. A aplicação deve ser responsiva a ponto de não tornar a interface confusa quando acessada a partir de um dispositivo móvel.

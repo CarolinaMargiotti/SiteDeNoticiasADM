@@ -4,19 +4,26 @@ import requests
 
 assuntos = ['pets','arte','geek']
 
-def getNews():
-    response = requests.get("http://127.0.0.1:8080/getallnews?startNumber=1&quantity=10")
-    print(response)
-    return noticias
+baseUrl="http://127.0.0.1:8080"
+
+def getNews(startNumber,limit):
+    response = requests.get(f'{baseUrl}/getallnews?startNumber={startNumber}&quantity={limit}')
+    return response.json()
 
 def getSubjects():
-    return assuntos
+    try:
+        response = requests.get(f"{baseUrl}/getallsubjects")
+        return response.json()
+    except:
+        return []
 
 #retorno dos templates
 
-def home():
-    noticias = getNews()
-    return render_template("home.html",newsList=noticias)
+def home(startNumber,limit):
+    noticias = getNews(startNumber,limit)
+    print(noticias)
+    assuntos = getSubjects()
+    return render_template("home.html",newsList=noticias,subjects=assuntos)
 
 def createNews():
     assuntos = getSubjects()

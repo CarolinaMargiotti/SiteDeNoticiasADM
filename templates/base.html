@@ -16,12 +16,13 @@
 					>
 						CarolNews
 					</h1>
-					<div class="menu">
-						<a
-							id="createLink"
-							href="{{url_for('news.createNews')}}"
-							style="visibility: hidden"
-							>Criar</a
+					<div class="menu" id="admLinks" style="visibility: hidden">
+						<a id="createLink" href="{{url_for('news.createNews')}}"
+							>Criar noticia</a
+						>
+
+						<a id="createLink" href="{{url_for('news.createNews')}}"
+							>Criar assunto</a
 						>
 					</div>
 				</div>
@@ -44,9 +45,9 @@
 </html>
 <script>
 	function handleHiddenElements() {
-		const createLinkElement = document.getElementById("createLink");
+		const admLinksElement = document.getElementById("admLinks");
 		const logoutButtonElement = document.getElementById("logout");
-		createLinkElement.style = "visibility: visible";
+		admLinksElement.style = "visibility: visible";
 		logoutButtonElement.style = "visibility: visible";
 	}
 
@@ -188,6 +189,7 @@
 		font-size: medium;
 		padding-left: 3%;
 		font-weight: bold;
+		width: 100%;
 	}
 
 	.menu a {
