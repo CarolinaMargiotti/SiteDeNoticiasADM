@@ -9,13 +9,14 @@
 	<button onclick="cancel()">Cancelar</button>
 	<button>Sim</button>
 </div>
+{{subjects['1']}}
 <br />
 <table>
 	<tr>
 		<th>ID</th>
 		<th>Titulo</th>
 		<th>Assunto</th>
-		<th>Conteudo</th>
+		<th>Resumo</th>
 		<th>Editar</th>
 		<th>Excluir</th>
 	</tr>
@@ -23,7 +24,7 @@
 	<tr>
 		<td>{{news.id}}</td>
 		<td>{{news.titulo}}</td>
-		<td>{{subjects[news.assunto].name}}</td>
+		<td>{{subjects.get(news.assunto)}}</td>
 		<td>{{news.resumo}}</td>
 		<td>
 			<a href="{{url_for('news.editNews',postId=news.id)}}">Editar</a>

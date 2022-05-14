@@ -19,8 +19,8 @@
 	<input type="text" id="titulo" />
 	<h3>Assunto</h3>
 	<select id="assunto">
-		{% for subject in subjects %}
-		<option value="{{subject.id}}">{{subject.name}}</option>
+		{% for key,value in subjects.items() %}
+		<option value="{{key}}">{{value}}</option>
 		{% endfor %}
 	</select>
 	<br />

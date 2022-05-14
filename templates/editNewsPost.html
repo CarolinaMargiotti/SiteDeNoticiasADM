@@ -3,6 +3,11 @@
 {% endblock %} {% extends 'base.html' %} {% block content %}
 <h1>Editar Noticia</h1>
 
+<div class="warnings">
+	<label id="creationWarning" style="color: seagreen"></label>
+	<label id="failureWarning" style="color: red"></label>
+</div>
+
 <div class="modal" id="editModal" style="visibility: hidden">
 	Criar?
 	<button onclick="cancel()">Cancelar</button>
@@ -16,10 +21,13 @@
 	<input type="text" id="titulo" value="{{news.titulo}}" />
 	<h3>Assunto</h3>
 	<select id="assunto" value="{{news.assunto}}">
-		{% for subject in subjects %}
-		<option value="{{subject}}">{{subject}}</option>
+		{% for key,value in subjects.items() %}
+		<option value="{{key}}">{{value}}</option>
 		{% endfor %}
 	</select>
+	<h3>Resumo</h3>
+	<textarea id="resumo" cols="30" rows="10">{{news.resumo}}</textarea>
+	<br />
 	<h3>Conteudo</h3>
 	<textarea id="conteudo" cols="30" rows="10">{{news.conteudo}}</textarea>
 	<br />
@@ -40,24 +48,50 @@
 		controlModalVisibility();
 	}
 
+
+	function setWarningError() {
+		const failureWarningElement = document.getElementById("failureWarning");
+		failureWarningElement.innerHTML = "Houve um erro: ";
+	}
+
+
 	function editNews() {
 		const titulo = document.getElementById("titulo").value;
 		const assunto = document.getElementById("assunto").value;
 		const conteudo = document.getElementById("conteudo").value;
-		const noticia = {
-			titulo: titulo,
-			assunto: assunto,
-			conteudo: conteudo,
+		const resumo = document.getElementById("resumo").value;
+
+		const baseUrl = 'http://127.0.0.1:8080'
+
+		const url = `${baseUrl}/editnews?id=${originalNews.id}&titulo=${titulo}&assunto=${assunto}&conteudo=${conteudo}&resumo=${resumo}`;
+		let xhr = new XMLHttpRequest();
+		xhr.open("post", url);
+		xhr.responseType = "json";
+		xhr.send();
+
+		xhr.onload = (event) => {
+			if (xhr.status !== 200) {
+				this.setWarningError();
+			} else {
+				toggleModal = false;
+				controlModalVisibility();
+				const creationWarningElement =
+					document.getElementById("creationWarning");
+				creationWarningElement.innerHTML = "Editado com sucesso";
+			}
 		};
 
-		console.log(noticia);
+		xhr.onerror = (event) => {
+			this.setWarningError();
+		};
 	}
 
 	function cancel() {
-		// const originalNews = {{news}}
 		document.getElementById("titulo").value = originalNews["titulo"];
 		document.getElementById("assunto").value = originalNews["assunto"];
 		document.getElementById("conteudo").value = originalNews["conteudo"];
+		document.getElementById("resumo").value = originalNews['resumo'] ;
+
 		toggleModal = false;
 		controlModalVisibility();
 	}

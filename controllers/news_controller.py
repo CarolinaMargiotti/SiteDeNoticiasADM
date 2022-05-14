@@ -17,11 +17,14 @@ def getSubjects():
     except:
         return []
 
+def getNewsById(newsId):
+    response = requests.get(f'{baseUrl}/getnews?id={newsId}')
+    return response.json()
+
 #retorno dos templates
 
 def home(startNumber,limit):
     noticias = getNews(startNumber,limit)
-    print(noticias)
     assuntos = getSubjects()
     return render_template("home.html",newsList=noticias,subjects=assuntos)
 
@@ -30,7 +33,7 @@ def createNews():
     return render_template("createNewsPost.html",subjects=assuntos)
 
 def editNews(postId):
-    noticia = getNews()[postId]
+    noticia = getNewsById(postId)
     assuntos = getSubjects()
     return render_template("editNewsPost.html",news=noticia,subjects=assuntos)
 
