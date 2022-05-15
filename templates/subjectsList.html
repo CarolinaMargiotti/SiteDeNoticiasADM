@@ -1,0 +1,75 @@
+{% block head %}
+<title>Assuntos</title>
+{% endblock %} {% extends 'base.html' %} {% block content %}
+<body>
+	<h1>Assuntos</h1>
+	<div class="modal" id="deleteModal" style="visibility: hidden">
+		Excluir?
+		<div id="tituloAssunto"></div>
+		<button onclick="cancel()">Cancelar</button>
+		<button onclick="deleteSubject()">Sim</button>
+	</div>
+
+	<table>
+		<tr>
+			<th>Id</th>
+			<th>Nome</th>
+			<th>Editar</th>
+			<th>Excluir</th>
+		</tr>
+		{% for key,value in subjects.items() %}
+		<tr>
+			<td>{{key}}</td>
+			<td>{{value}}</td>
+			<td><a href="">Editar</a></td>
+			<td>
+				<button onclick="handleModal({{key}},'{{value}}')">
+					Excluir
+				</button>
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+</body>
+<script>
+	let toggleModal = false;
+	let selectedSubject = {};
+
+	function controlModalVisibility() {
+		const element = document.getElementById("deleteModal");
+		element.style.visibility = toggleModal ? "visible" : "hidden";
+	}
+
+	function handleModal(id, assunto) {
+		selectedSubject = { id: id, subjectName: assunto };
+		const titulo = document.getElementById("tituloAssunto");
+		titulo.innerText = selectedSubject.subjectName;
+
+		toggleModal = !toggleModal;
+		controlModalVisibility();
+	}
+
+	function deleteSubject() {
+		const baseUrl = "http://127.0.0.1:8080";
+
+		const url = `${baseUrl}/deletesubject?id=${selectedSubject.id}`;
+		let xhr = new XMLHttpRequest();
+		xhr.open("post", url);
+		xhr.responseType = "json";
+		xhr.send();
+
+		xhr.onload = (event) => {
+			if (xhr.status !== 200) {
+				alert("erro");
+			} else {
+				toggleModal = false;
+				window.location = "http://127.0.0.1:5000/subjectslist";
+			}
+		};
+
+		xhr.onerror = (event) => {
+			alert("erro");
+		};
+	}
+</script>
+{% endblock content %}

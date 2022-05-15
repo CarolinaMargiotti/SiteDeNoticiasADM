@@ -39,3 +39,10 @@ def editNews(postId):
 
 def login():
     return render_template("login.html")
+
+def subjectList():
+    assuntos = getSubjects()
+    return render_template("subjectslist.html",subjects=assuntos)
+
+def createSubject():
+    return render_template("createSubjects.html")

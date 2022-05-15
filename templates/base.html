@@ -17,11 +17,16 @@
 						CarolNews
 					</h1>
 					<div class="menu" id="admLinks" style="visibility: hidden">
-						<a id="createLink" href="{{url_for('news.createNews')}}"
+						<a href="{{url_for('news.home')}}">Lista noticias</a>
+						<a href="{{url_for('news.createNews')}}"
 							>Criar noticia</a
 						>
 
-						<a id="createLink" href="{{url_for('news.createNews')}}"
+						<a href="{{url_for('news.subjectList')}}"
+							>Lista Assuntos</a
+						>
+
+						<a href="{{url_for('news.createSubject')}}"
 							>Criar assunto</a
 						>
 					</div>

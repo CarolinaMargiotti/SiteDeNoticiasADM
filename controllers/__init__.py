@@ -5,6 +5,8 @@ from controllers.news_controller import home as news_home
 from controllers.news_controller import createNews as news_create
 from controllers.news_controller import editNews as news_edit
 from controllers.news_controller import login as login_user
+from controllers.news_controller import subjectList as subject_list
+from controllers.news_controller import createSubject as create_subject
 
 template_dir = os.path.abspath('sitedenoticiasadm/templates/')
 
@@ -30,3 +32,11 @@ def editNews(postId):
 @news_bp.route("/login")
 def login():
     return login_user()
+
+@news_bp.route("/subjectslist")
+def subjectList():
+    return subject_list()
+
+@news_bp.route("/createsubject")
+def createSubject():
+    return create_subject()
