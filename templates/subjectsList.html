@@ -21,7 +21,11 @@
 		<tr>
 			<td>{{key}}</td>
 			<td>{{value}}</td>
-			<td><a href="">Editar</a></td>
+			<td>
+				<a href="{{url_for('subjects.editSubject',subjectId=key)}}"
+					>Editar</a
+				>
+			</td>
 			<td>
 				<button onclick="handleModal({{key}},'{{value}}')">
 					Excluir

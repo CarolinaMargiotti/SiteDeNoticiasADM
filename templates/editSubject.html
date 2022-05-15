@@ -1,0 +1,87 @@
+{% block head %}
+<title>Editar</title>
+{% endblock %} {% extends 'base.html' %} {% block content %}
+<h1>Editar Assunto</h1>
+
+<div class="warnings">
+	<label id="creationWarning" style="color: seagreen"></label>
+	<label id="failureWarning" style="color: red"></label>
+</div>
+
+<div class="modal" id="editModal" style="visibility: hidden">
+	Criar?
+	<button onclick="cancel()">Cancelar</button>
+	<button onclick="editNews()">Sim</button>
+</div>
+
+<div class="form">
+	<h3>Id</h3>
+	<input type="text" value="{{assunto.id}}" readonly />
+	<h3>Nome</h3>
+	<br />
+	<input type="text" id="titulo" value="{{assunto.subjectName}}" />
+	<br />
+
+	<button onclick="handleModal()">Editar</button>
+</div>
+
+<script>
+	let toggleModal = false;
+	const originalSubject= {{assunto | tojson }}
+
+	   console.log(assunto);
+
+	function controlModalVisibility() {
+		const element = document.getElementById("editModal");
+		element.style.visibility = toggleModal ? "visible" : "hidden";
+	}
+
+	function handleModal() {
+		toggleModal = !toggleModal;
+		controlModalVisibility();
+	}
+
+
+	function setWarningError() {
+		const failureWarningElement = document.getElementById("failureWarning");
+		failureWarningElement.innerHTML = "Houve um erro: ";
+	}
+
+
+	function editNews() {
+		const nome = document.getElementById("titulo").value;
+
+		const baseUrl = 'http://127.0.0.1:8080'
+
+		const url = `${baseUrl}/editsubject?id=${originalSubject.id}&subjectName=${nome}`;
+		let xhr = new XMLHttpRequest();
+		xhr.open("post", url);
+		xhr.responseType = "json";
+		xhr.send();
+
+		xhr.onload = (event) => {
+			if (xhr.status !== 200) {
+				this.setWarningError();
+			} else {
+				toggleModal = false;
+				controlModalVisibility();
+				const creationWarningElement =
+					document.getElementById("creationWarning");
+				creationWarningElement.innerHTML = "Editado com sucesso";
+			}
+		};
+
+		xhr.onerror = (event) => {
+			this.setWarningError();
+		};
+	}
+
+	function cancel() {
+		document.getElementById("nome").value = originalSubject["nome"];
+
+
+		toggleModal = false;
+		controlModalVisibility();
+	}
+</script>
+{% endblock content %}

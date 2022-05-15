@@ -5,12 +5,14 @@ from controllers.news_controller import home as news_home
 from controllers.news_controller import createNews as news_create
 from controllers.news_controller import editNews as news_edit
 from controllers.news_controller import login as login_user
-from controllers.news_controller import subjectList as subject_list
-from controllers.news_controller import createSubject as create_subject
+from controllers.subjects_controller import subjectList as subject_list
+from controllers.subjects_controller import createSubject as create_subject
+from controllers.subjects_controller import editSubject as edit_subject
 
 template_dir = os.path.abspath('sitedenoticiasadm/templates/')
 
 news_bp = Blueprint("news",__name__,template_folder=template_dir)
+subjects_bp = Blueprint("subjects",__name__,template_folder=template_dir)
 
 @news_bp.route("/")
 def home():
@@ -18,7 +20,6 @@ def home():
     startNumber = req.get("startNumber",1)
     limit = req.get("limit",10)
 
-    # if user is logged, else
     return news_home(startNumber,limit)
 
 @news_bp.route("/create")
@@ -33,10 +34,14 @@ def editNews(postId):
 def login():
     return login_user()
 
-@news_bp.route("/subjectslist")
+@subjects_bp.route("/subjectslist")
 def subjectList():
     return subject_list()
 
-@news_bp.route("/createsubject")
+@subjects_bp.route("/createsubject")
 def createSubject():
     return create_subject()
+
+@subjects_bp.route("/editsubject/<int:subjectId>")
+def editSubject(subjectId):
+    return edit_subject(subjectId)
