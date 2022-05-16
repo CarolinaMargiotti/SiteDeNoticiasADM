@@ -10,6 +10,14 @@
 		<button onclick="deleteSubject()">Sim</button>
 	</div>
 
+	<label>Quantidade por pagina:</label>
+	<input
+		type="text"
+		value="{{quantity}}"
+		id="limitPerPage"
+		onchange="changeLimit(value)"
+	/>
+
 	<table>
 		<tr>
 			<th>Id</th>
@@ -34,10 +42,27 @@
 		</tr>
 		{% endfor %}
 	</table>
+	<button onclick="changePage({{pageNumber}}-1,{{quantity}})"><-</button>
+	<label id="pageLabel">{{pageNumber}}</label>
+	<button onclick="changePage({{pageNumber}}+1,{{quantity}})">-></button>
 </body>
 <script>
+	const admBaseUrl = "http://127.0.0.1:5000";
+	const subjectsList = {{subjects | tojson}}
+	const currentPage = {{pageNumber | tojson}}
 	let toggleModal = false;
 	let selectedSubject = {};
+
+	function changePage(newPage, quantity) {
+		console.log(subjectsList);
+		if (newPage <= 0) return;
+		if (subjectsList.length < quantity && newPage>currentPage) return;
+		window.location = `${admBaseUrl}/subjectslist?pageNumber=${newPage}&limit=${quantity}`;
+	}
+
+	function changeLimit(value){
+		window.location = `${admBaseUrl}/subjectslist?pageNumber=${currentPage}&limit=${value}`;
+	}
 
 	function controlModalVisibility() {
 		const element = document.getElementById("deleteModal");

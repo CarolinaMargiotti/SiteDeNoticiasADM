@@ -10,6 +10,13 @@
 	<button onclick="deleteNews()">Sim</button>
 </div>
 <br />
+<label>Quantidade por pagina:</label>
+<input
+	type="text"
+	value="{{quantity}}"
+	id="limitPerPage"
+	onchange="changeLimit(value)"
+/>
 <table>
 	<tr>
 		<th>ID</th>
@@ -33,10 +40,26 @@
 	</tr>
 	{% endfor %}
 </table>
+<button onclick="changePage({{pageNumber}}-1,{{quantity}})"><-</button>
+<label id="pageLabel">{{pageNumber}}</label>
+<button onclick="changePage({{pageNumber}}+1,{{quantity}})">-></button>
 
 <script>
+	const admBaseUrl = "http://127.0.0.1:5000";
+	const news = {{newsList | tojson}}
+	const currentPage = {{pageNumber | tojson}}
 	let toggleModal = false;
 	let selectedNews = {};
+
+	function changePage(newPage, quantity) {
+		if (newPage <= 0) return;
+		if (news.length < quantity && newPage>currentPage) return;
+		window.location = `${admBaseUrl}?pageNumber=${newPage}&limit=${quantity}`;
+	}
+
+	function changeLimit(value){
+		window.location = `${admBaseUrl}?pageNumber=${currentPage}&limit=${value}`;
+	}
 
 	function controlModalVisibility() {
 		const element = document.getElementById("deleteModal");
@@ -66,7 +89,7 @@
 				alert("erro");
 			} else {
 				toggleModal = false;
-				window.location = "http://127.0.0.1:5000/";
+				window.location = admBaseUrl;
 			}
 		};
 

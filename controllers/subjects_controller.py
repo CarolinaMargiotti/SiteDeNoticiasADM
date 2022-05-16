@@ -3,7 +3,14 @@ import requests
 
 baseUrl="http://127.0.0.1:8080"
 
-def getSubjects():
+def getSubjects(startNumber,limit):
+    try:
+        response = requests.get(f"{baseUrl}/getsubjects?startNumber={startNumber}&quantity={limit}")
+        return response.json()
+    except:
+        return []
+
+def getAllSubjects():
     try:
         response = requests.get(f"{baseUrl}/getallsubjects")
         return response.json()
@@ -17,9 +24,11 @@ def getSubjectById(id):
     except:
         return {}
 
-def subjectList():
-    assuntos = getSubjects()
-    return render_template("subjectslist.html",subjects=assuntos)
+def subjectList(limit,pageNumber):
+    startNumber = (int(limit)*int(pageNumber))-(int(limit)-1)
+    assuntos = getSubjects(startNumber,limit)
+
+    return render_template("subjectslist.html",subjects=assuntos,pageNumber=pageNumber,quantity=limit)
 
 def createSubject():
     return render_template("createSubjects.html")

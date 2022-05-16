@@ -17,10 +17,10 @@ subjects_bp = Blueprint("subjects",__name__,template_folder=template_dir)
 @news_bp.route("/")
 def home():
     req = request.args
-    startNumber = req.get("startNumber",1)
-    limit = req.get("limit",10)
+    pageNumber = req.get("pageNumber",1)
+    limit = req.get("limit",4)
 
-    return news_home(startNumber,limit)
+    return news_home(limit,pageNumber)
 
 @news_bp.route("/create")
 def createNews():
@@ -36,7 +36,11 @@ def login():
 
 @subjects_bp.route("/subjectslist")
 def subjectList():
-    return subject_list()
+    req = request.args
+    pageNumber = req.get("pageNumber",1)
+    limit = req.get("limit",4)
+
+    return subject_list(limit,pageNumber)
 
 @subjects_bp.route("/createsubject")
 def createSubject():
