@@ -43,37 +43,34 @@
   </body>
 </html>
 <script>
-     const thisProjectUrl = {{projectUrl | tojson}}
-
   function handleHiddenElements() {
-  	const admLinksElement = document.getElementById("admLinks");
-  	const logoutButtonElement = document.getElementById("logout");
-  	admLinksElement.style = "visibility: visible";
-  	logoutButtonElement.style = "visibility: visible";
+    const admLinksElement = document.getElementById("admLinks");
+    const logoutButtonElement = document.getElementById("logout");
+    admLinksElement.style = "visibility: visible";
+    logoutButtonElement.style = "visibility: visible";
   }
 
   function setUsername(username) {
-  	const usernameLabelElement = document.getElementById("username");
-  	usernameLabelElement.innerHTML = username;
+    const usernameLabelElement = document.getElementById("username");
+    usernameLabelElement.innerHTML = username;
   }
 
   (function checkCookie() {
-  	const cookies = document.cookie;
-  	const url = window.location.href;
+    const cookies = document.cookie;
+    const url = window.location.href;
 
-  	if (!url.includes("login")) {
-  		if (!cookies) {
-  			window.location =`${thisProjectUrl}/login`;
-  		}
-  		this.handleHiddenElements();
-  		this.setUsername(cookies.replace("user=", ""));
-  	}
+    if (!url.includes("login")) {
+      if (!cookies) {
+        window.location = `${thisProjectUrl}/login`;
+      }
+      this.handleHiddenElements();
+      this.setUsername(cookies.replace("user=", ""));
+    }
   })();
 
   function clearCookies() {
-  	document.cookies = "";
-  window.location =`${thisProjectUrl}/login`;
-
+    document.cookies = "";
+    window.location = `${thisProjectUrl}/login`;
   }
 </script>
 <style>
