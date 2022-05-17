@@ -1,50 +1,48 @@
 {% block head %}
 <title>Assuntos</title>
 {% endblock %} {% extends 'base.html' %} {% block content %}
-<body>
-  <h1>Assuntos</h1>
+<h1>Assuntos</h1>
 
-  <label id="failureWarning" style="color: red"></label>
+<label id="failureWarning" style="color: red"></label>
 
-  <div class="modal" id="deleteModal" style="visibility: hidden">
-    Excluir?
-    <div id="tituloAssunto"></div>
-    <button onclick="cancel()">Cancelar</button>
-    <button onclick="deleteSubject()">Sim</button>
-  </div>
+<div class="modal" id="deleteModal" style="visibility: hidden">
+  Excluir?
+  <div id="tituloAssunto"></div>
+  <button onclick="cancel()">Cancelar</button>
+  <button onclick="deleteSubject()">Sim</button>
+</div>
 
-  <label>Quantidade por pagina:</label>
-  <input
-    type="text"
-    value="{{quantity}}"
-    id="limitPerPage"
-    onchange="changeLimit(value)"
-  />
+<label>Quantidade por pagina:</label>
+<input
+  type="text"
+  value="{{quantity}}"
+  id="limitPerPage"
+  onchange="changeLimit(value)"
+/>
 
-  <table>
-    <tr>
-      <th>Id</th>
-      <th>Nome</th>
-      <th>Editar</th>
-      <th>Excluir</th>
-    </tr>
-    {% for key,value in subjects.items() %}
-    <tr>
-      <td>{{key}}</td>
-      <td>{{value}}</td>
-      <td>
-        <a href="{{url_for('subjects.editSubject',subjectId=key)}}">Editar</a>
-      </td>
-      <td>
-        <button onclick="handleModal({{key}},'{{value}}')">Excluir</button>
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
-  <button onclick="changePage({{pageNumber}}-1,{{quantity}})"><-</button>
-  <label id="pageLabel">{{pageNumber}}</label>
-  <button onclick="changePage({{pageNumber}}+1,{{quantity}})">-></button>
-</body>
+<table>
+  <tr>
+    <th>Id</th>
+    <th>Nome</th>
+    <th>Editar</th>
+    <th>Excluir</th>
+  </tr>
+  {% for key,value in subjects.items() %}
+  <tr>
+    <td>{{key}}</td>
+    <td>{{value}}</td>
+    <td>
+      <a href="{{url_for('subjects.editSubject',subjectId=key)}}">Editar</a>
+    </td>
+    <td>
+      <button onclick="handleModal({{key}},'{{value}}')">Excluir</button>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+<button onclick="changePage({{pageNumber}}-1,{{quantity}})"><-</button>
+<label id="pageLabel">{{pageNumber}}</label>
+<button onclick="changePage({{pageNumber}}+1,{{quantity}})">-></button>
 <script>
     const urlFromService = {{serviceUrl | tojson}}
     const thisProjectUrl = {{projectUrl | tojson}}
@@ -103,4 +101,5 @@
   	};
   }
 </script>
+
 {% endblock content %}
