@@ -2,76 +2,78 @@
 <title>Criar assuntos</title>
 {% endblock %} {% extends 'base.html' %} {% block content %}
 <body>
-	<h1>Criar assuntos</h1>
+  <h1>Criar assuntos</h1>
 
-	<div class="warnings">
-		<label id="creationWarning" style="color: seagreen"></label>
-		<label id="failureWarning" style="color: red"></label>
-	</div>
+  <div class="warnings">
+    <label id="creationWarning" style="color: seagreen"></label>
+    <label id="failureWarning" style="color: red"></label>
+  </div>
 
-	<div class="modal" id="createModal" style="visibility: hidden">
-		Criar?
-		<button onclick="cancel()">Cancelar</button>
-		<button onclick="createSubject()">Sim</button>
-	</div>
-	<div class="form">
-		<h3>Nome</h3>
-		<br />
-		<input type="text" id="subjectName" />
-		<br />
-		<button onclick="handleModal()">Criar</button>
-	</div>
+  <div class="modal" id="createModal" style="visibility: hidden">
+    Criar?
+    <button onclick="cancel()">Cancelar</button>
+    <button onclick="createSubject()">Sim</button>
+  </div>
+  <div class="form">
+    <h3>Nome</h3>
+    <br />
+    <input type="text" id="subjectName" />
+    <br />
+    <button onclick="handleModal()">Criar</button>
+  </div>
 </body>
 <script>
-	let toggleModal = false;
+  let toggleModal = false;
 
-	function controlModalVisibility() {
-		const element = document.getElementById("createModal");
-		element.style.visibility = toggleModal ? "visible" : "hidden";
-	}
+  function controlModalVisibility() {
+    const element = document.getElementById("createModal");
+    element.style.visibility = toggleModal ? "visible" : "hidden";
+  }
 
-	function handleModal() {
-		toggleModal = !toggleModal;
-		controlModalVisibility();
-	}
+  function handleModal() {
+    toggleModal = !toggleModal;
+    controlModalVisibility();
+  }
 
-	function cancel() {
-		document.getElementById("subjectName").value = "";
-		toggleModal = false;
-		controlModalVisibility();
-	}
+  function cancel() {
+    document.getElementById("subjectName").value = "";
+    toggleModal = false;
+    controlModalVisibility();
+  }
 
-	function setWarningError() {
-		const failureWarningElement = document.getElementById("failureWarning");
-		failureWarningElement.innerHTML = "Houve um erro ";
-	}
+  function setWarningError() {
+    const failureWarningElement = document.getElementById("failureWarning");
+    failureWarningElement.innerHTML = "Houve um erro ";
+  }
 
-	function createSubject() {
-		const nomeAssunto = document.getElementById("subjectName").value;
+  function createSubject() {
+    const nomeAssunto = document.getElementById("subjectName").value;
 
-		const baseUrl = "http://127.0.0.1:8080";
+    const baseUrl = "http://127.0.0.1:8080";
+    let data = new FormData();
+    data.append("subjectName", nomeAssunto);
 
-		const url = `${baseUrl}/createsubject?subjectName=${nomeAssunto}`;
-		let xhr = new XMLHttpRequest();
-		xhr.open("post", url);
-		xhr.responseType = "json";
-		xhr.send();
+    const url = `${baseUrl}/createsubject`;
+    let xhr = new XMLHttpRequest();
+    xhr.open("post", url);
+    xhr.responseType = "json";
+    xhr.send(data);
 
-		xhr.onload = (event) => {
-			if (xhr.status !== 200) {
-				this.setWarningError();
-			} else {
-				toggleModal = false;
-				controlModalVisibility();
-				const creationWarningElement =
-					document.getElementById("creationWarning");
-				creationWarningElement.innerHTML = "Criado com sucesso";
-			}
-		};
+    xhr.onload = (event) => {
+      if (xhr.status !== 200) {
+        this.setWarningError();
+      } else {
+        toggleModal = false;
+        controlModalVisibility();
+        const creationWarningElement =
+          document.getElementById("creationWarning");
+        creationWarningElement.innerHTML = "Criado com sucesso";
+      }
+    };
 
-		xhr.onerror = (event) => {
-			this.setWarningError();
-		};
-	}
+    xhr.onerror = (event) => {
+      this.setWarningError();
+    };
+  }
 </script>
 {% endblock content %}

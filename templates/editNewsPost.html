@@ -4,96 +4,103 @@
 <h1>Editar Noticia</h1>
 
 <div class="warnings">
-	<label id="creationWarning" style="color: seagreen"></label>
-	<label id="failureWarning" style="color: red"></label>
+  <label id="creationWarning" style="color: seagreen"></label>
+  <label id="failureWarning" style="color: red"></label>
 </div>
 
 <div class="modal" id="editModal" style="visibility: hidden">
-	Criar?
-	<button onclick="cancel()">Cancelar</button>
-	<button onclick="editNews()">Sim</button>
+  Criar?
+  <button onclick="cancel()">Cancelar</button>
+  <button onclick="editNews()">Sim</button>
 </div>
 
 <div class="form">
-	<h3>Id</h3>
-	<input type="text" value="{{news.id}}" readonly />
-	<h3>Titulo</h3>
-	<input type="text" id="titulo" value="{{news.titulo}}" />
-	<h3>Assunto</h3>
-	<select id="assunto" value="{{news.assunto}}">
-		{% for key,value in subjects.items() %}
-		<option value="{{key}}">{{value}}</option>
-		{% endfor %}
-	</select>
-	<h3>Resumo</h3>
-	<textarea id="resumo" cols="30" rows="10">{{news.resumo}}</textarea>
-	<br />
-	<h3>Conteudo</h3>
-	<textarea id="conteudo" cols="30" rows="10">{{news.conteudo}}</textarea>
-	<br />
-	<button onclick="handleModal()">Editar</button>
+  <h3>Id</h3>
+  <input type="text" value="{{news.id}}" readonly />
+  <h3>Titulo</h3>
+  <input type="text" id="titulo" value="{{news.titulo}}" />
+  <h3>Assunto</h3>
+  <select id="assunto" value="{{news.assunto}}">
+    {% for key,value in subjects.items() %}
+    <option value="{{key}}">{{value}}</option>
+    {% endfor %}
+  </select>
+  <h3>Resumo</h3>
+  <textarea id="resumo" cols="30" rows="10">{{news.resumo}}</textarea>
+  <br />
+  <h3>Conteudo</h3>
+  <textarea id="conteudo" cols="30" rows="10">{{news.conteudo}}</textarea>
+  <br />
+  <button onclick="handleModal()">Editar</button>
 </div>
 
 <script>
-	let toggleModal = false;
-	const originalNews= {{news | tojson }}
+  let toggleModal = false;
+  const originalNews= {{news | tojson }}
 
-	function controlModalVisibility() {
-		const element = document.getElementById("editModal");
-		element.style.visibility = toggleModal ? "visible" : "hidden";
-	}
+  function controlModalVisibility() {
+  	const element = document.getElementById("editModal");
+  	element.style.visibility = toggleModal ? "visible" : "hidden";
+  }
 
-	function handleModal() {
-		toggleModal = !toggleModal;
-		controlModalVisibility();
-	}
-
-
-	function setWarningError() {
-		const failureWarningElement = document.getElementById("failureWarning");
-		failureWarningElement.innerHTML = "Houve um erro: ";
-	}
+  function handleModal() {
+  	toggleModal = !toggleModal;
+  	controlModalVisibility();
+  }
 
 
-	function editNews() {
-		const titulo = document.getElementById("titulo").value;
-		const assunto = document.getElementById("assunto").value;
-		const conteudo = document.getElementById("conteudo").value;
-		const resumo = document.getElementById("resumo").value;
+  function setWarningError() {
+  	const failureWarningElement = document.getElementById("failureWarning");
+  	failureWarningElement.innerHTML = "Houve um erro: ";
+  }
 
-		const baseUrl = 'http://127.0.0.1:8080'
 
-		const url = `${baseUrl}/editnews?id=${originalNews.id}&titulo=${titulo}&assunto=${assunto}&conteudo=${conteudo}&resumo=${resumo}`;
-		let xhr = new XMLHttpRequest();
-		xhr.open("post", url);
-		xhr.responseType = "json";
-		xhr.send();
+  function editNews() {
+  	const titulo = document.getElementById("titulo").value;
+  	const assunto = document.getElementById("assunto").value;
+  	const conteudo = document.getElementById("conteudo").value;
+  	const resumo = document.getElementById("resumo").value;
 
-		xhr.onload = (event) => {
-			if (xhr.status !== 200) {
-				this.setWarningError();
-			} else {
-				toggleModal = false;
-				controlModalVisibility();
-				const creationWarningElement =
-					document.getElementById("creationWarning");
-				creationWarningElement.innerHTML = "Editado com sucesso";
-			}
-		};
+  	const baseUrl = 'http://127.0.0.1:8080'
 
-		xhr.onerror = (event) => {
-			this.setWarningError();
-		};
-	}
+  	let data = new FormData()
+  	data.append("id",originalNews.id)
+  	data.append("titulo",titulo)
+  	data.append("assunto",assunto)
+  	data.append("conteudo",conteudo)
+  	data.append("resumo",resumo)
 
-	function cancel() {
-		document.getElementById("titulo").value = originalNews["titulo"];
-		document.getElementById("assunto").value = originalNews["assunto"];
-		document.getElementById("conteudo").value = originalNews["conteudo"];
-		document.getElementById("resumo").value = originalNews['resumo'] ;
+  	const url = `${baseUrl}/editnews`;
+  	let xhr = new XMLHttpRequest();
+  	xhr.open("post", url);
+  	xhr.responseType = "json";
+  	xhr.send(data);
 
-		toggleModal = false;
-		controlModalVisibility();
-	}
+  	xhr.onload = (event) => {
+  		if (xhr.status !== 200) {
+  			this.setWarningError();
+  		} else {
+  			toggleModal = false;
+  			controlModalVisibility();
+  			const creationWarningElement =
+  				document.getElementById("creationWarning");
+  			creationWarningElement.innerHTML = "Editado com sucesso";
+  		}
+  	};
+
+  	xhr.onerror = (event) => {
+  		this.setWarningError();
+  	};
+  }
+
+  function cancel() {
+  	document.getElementById("titulo").value = originalNews["titulo"];
+  	document.getElementById("assunto").value = originalNews["assunto"];
+  	document.getElementById("conteudo").value = originalNews["conteudo"];
+  	document.getElementById("resumo").value = originalNews['resumo'] ;
+
+  	toggleModal = false;
+  	controlModalVisibility();
+  }
 </script>
 {% endblock content %}

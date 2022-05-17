@@ -4,100 +4,105 @@
 <h1>Criar Noticias</h1>
 
 <div class="warnings">
-	<label id="creationWarning" style="color: seagreen"></label>
-	<label id="failureWarning" style="color: red"></label>
+  <label id="creationWarning" style="color: seagreen"></label>
+  <label id="failureWarning" style="color: red"></label>
 </div>
 
 <div class="modal" id="createModal" style="visibility: hidden">
-	Criar?
-	<button onclick="cancel()">Cancelar</button>
-	<button onclick="createNews()">Sim</button>
+  Criar?
+  <button onclick="cancel()">Cancelar</button>
+  <button onclick="createNews()">Sim</button>
 </div>
 <button onclick="cancel()">Limpar</button>
 <div class="form">
-	<h3>Titulo</h3>
-	<input type="text" id="titulo" />
-	<h3>Assunto</h3>
-	<select id="assunto">
-		{% for key,value in subjects.items() %}
-		<option value="{{key}}">{{value}}</option>
-		{% endfor %}
-	</select>
-	<br />
-	<h3>Resumo</h3>
-	<textarea id="resumo" cols="30" rows="10"></textarea>
-	<h3>Conteudo</h3>
-	<textarea id="conteudo" cols="50" rows="10"></textarea>
-	<br />
-	<button onclick="handleModal()">Criar</button>
+  <h3>Titulo</h3>
+  <input type="text" id="titulo" />
+  <h3>Assunto</h3>
+  <select id="assunto">
+    {% for key,value in subjects.items() %}
+    <option value="{{key}}">{{value}}</option>
+    {% endfor %}
+  </select>
+  <br />
+  <h3>Resumo</h3>
+  <textarea id="resumo" cols="30" rows="10"></textarea>
+  <h3>Conteudo</h3>
+  <textarea id="conteudo" cols="50" rows="10"></textarea>
+  <br />
+  <button onclick="handleModal()">Criar</button>
 </div>
 
 <script>
-	let toggleModal = false;
+  let toggleModal = false;
 
-	function controlModalVisibility() {
-		const element = document.getElementById("createModal");
-		element.style.visibility = toggleModal ? "visible" : "hidden";
-	}
+  function controlModalVisibility() {
+    const element = document.getElementById("createModal");
+    element.style.visibility = toggleModal ? "visible" : "hidden";
+  }
 
-	function handleModal() {
-		toggleModal = !toggleModal;
-		controlModalVisibility();
-	}
+  function handleModal() {
+    toggleModal = !toggleModal;
+    controlModalVisibility();
+  }
 
-	function setWarningError() {
-		const failureWarningElement = document.getElementById("failureWarning");
-		failureWarningElement.innerHTML = "Houve um erro ";
-	}
+  function setWarningError() {
+    const failureWarningElement = document.getElementById("failureWarning");
+    failureWarningElement.innerHTML = "Houve um erro ";
+  }
 
-	function unsetEverything() {
-		const creationWarningElement =
-			document.getElementById("creationWarning");
-		creationWarningElement.innerHTML = "";
-		const failureWarningElement = document.getElementById("failureWarning");
-		failureWarningElement.innerHTML = "";
-	}
+  function unsetEverything() {
+    const creationWarningElement = document.getElementById("creationWarning");
+    creationWarningElement.innerHTML = "";
+    const failureWarningElement = document.getElementById("failureWarning");
+    failureWarningElement.innerHTML = "";
+  }
 
-	function createNews() {
-		this.unsetEverything();
-		const titulo = document.getElementById("titulo").value;
-		const assunto = document.getElementById("assunto").value;
-		const conteudo = document.getElementById("conteudo").value;
-		const resumo = document.getElementById("resumo").value;
+  function createNews() {
+    this.unsetEverything();
+    const titulo = document.getElementById("titulo").value;
+    const assunto = document.getElementById("assunto").value;
+    const conteudo = document.getElementById("conteudo").value;
+    const resumo = document.getElementById("resumo").value;
 
-		const baseUrl = "http://127.0.0.1:8080";
+    const baseUrl = "http://127.0.0.1:8080";
 
-		const url = `${baseUrl}/createnews?titulo=${titulo}&assunto=${assunto}&conteudo=${conteudo}&resumo=${resumo}`;
-		let xhr = new XMLHttpRequest();
-		xhr.open("post", url);
-		xhr.responseType = "json";
-		xhr.send();
+    let data = new FormData();
+    data.append("titulo", titulo);
+    data.append("assunto", assunto);
+    data.append("conteudo", conteudo);
+    data.append("resumo", resumo);
 
-		xhr.onload = (event) => {
-			if (xhr.status !== 200) {
-				this.setWarningError();
-			} else {
-				toggleModal = false;
-				controlModalVisibility();
-				const creationWarningElement =
-					document.getElementById("creationWarning");
-				creationWarningElement.innerHTML = "Criado com sucesso";
-			}
-		};
+    const url = `${baseUrl}/createnews`;
+    let xhr = new XMLHttpRequest();
+    xhr.open("post", url);
+    xhr.responseType = "json";
+    xhr.send(data);
 
-		xhr.onerror = (event) => {
-			this.setWarningError();
-		};
-	}
+    xhr.onload = (event) => {
+      if (xhr.status !== 200) {
+        this.setWarningError();
+      } else {
+        toggleModal = false;
+        controlModalVisibility();
+        const creationWarningElement =
+          document.getElementById("creationWarning");
+        creationWarningElement.innerHTML = "Criado com sucesso";
+      }
+    };
 
-	function cancel() {
-		document.getElementById("titulo").value = "";
-		document.getElementById("assunto").value = "";
-		document.getElementById("conteudo").value = "";
-		document.getElementById("resumo").value = "";
-		toggleModal = false;
-		this.unsetEverything();
-		controlModalVisibility();
-	}
+    xhr.onerror = (event) => {
+      this.setWarningError();
+    };
+  }
+
+  function cancel() {
+    document.getElementById("titulo").value = "";
+    document.getElementById("assunto").value = "";
+    document.getElementById("conteudo").value = "";
+    document.getElementById("resumo").value = "";
+    toggleModal = false;
+    this.unsetEverything();
+    controlModalVisibility();
+  }
 </script>
 {% endblock content %}
