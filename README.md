@@ -13,18 +13,23 @@ Essa é a versão de ADM em que um usuario identificado pode criar, editar e exc
 ## Passos no projeto
 
 1. Instalar virtualenv
+
    `pip install virtualenv`
 
 1. Criar ambiente do virtualenv
+
    `virtualenv myenv`
 
 1. Ativar virtualenv
+
    `.\myenv\Scripts\activate`
 
 1. Instalar dependencias
+
    `pip install -r requirements.txt`
 
 1. Rodar app
+
    `python server.py`
 
 # Requisitos Técnicos
