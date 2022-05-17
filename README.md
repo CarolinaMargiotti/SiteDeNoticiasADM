@@ -4,20 +4,28 @@ Essa é a versão de ADM em que um usuario identificado pode criar, editar e exc
 
 # Como rodar
 
-1. Instalar virtualenv \
-   pip install virtualenv
+## Passos fora do projeto
 
-1. Criar ambiente do virtualenv \
-   virtualenv myenv
+- Rodar projeto service
 
-1. Ativar virtualenv \
-   .\myenv\Scripts\activate
+(Service)[https://github.com/CarolinaMargiotti/SiteDeNoticiasServices]
 
-1. Instalar dependencias \
-   pip install -r requirements.txt
+## Passos no projeto
 
-1. Rodar app \
-   python server.py
+1. Instalar virtualenv
+   `pip install virtualenv`
+
+1. Criar ambiente do virtualenv
+   `virtualenv myenv`
+
+1. Ativar virtualenv
+   `.\myenv\Scripts\activate`
+
+1. Instalar dependencias
+   `pip install -r requirements.txt`
+
+1. Rodar app
+   `python server.py`
 
 # Requisitos Técnicos
 
@@ -39,9 +47,9 @@ Essa é a versão de ADM em que um usuario identificado pode criar, editar e exc
 3. O usuário administrador (único) deve acessar a interface administrativa somente após ter sido autenticado, não havendo uma rota diretamente acessível sem o procedimento de autenticação.
 4. Cada notícia deve possuir (no mínimo):
 
--   Um assunto (ex. esporte, política, etc.)
--   Um título
--   Um conteúdo.
+- Um assunto (ex. esporte, política, etc.)
+- Um título
+- Um conteúdo.
 
 4. Sua aplicação web deve conter um menu para navegação e, no mínimo, três interfaces distintas com o usuário, acessíveis a partir do menu.
 
