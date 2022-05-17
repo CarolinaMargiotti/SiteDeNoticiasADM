@@ -6,9 +6,9 @@ Essa é a versão de ADM em que um usuario identificado pode criar, editar e exc
 
 ## Passos fora do projeto
 
-- Rodar projeto service
+1. Rodar serviços
 
-(Service)[https://github.com/CarolinaMargiotti/SiteDeNoticiasServices]
+[Link para projeto de serviços](https://github.com/CarolinaMargiotti/SiteDeNoticiasServices)
 
 ## Passos no projeto
 
