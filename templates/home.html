@@ -4,103 +4,103 @@
 <h1>Todas noticias</h1>
 
 <div class="modal" id="deleteModal" style="visibility: hidden">
-	Excluir?
-	<div id="tituloNoticia"></div>
-	<button onclick="cancel()">Cancelar</button>
-	<button onclick="deleteNews()">Sim</button>
+  Excluir?
+  <div id="tituloNoticia"></div>
+  <button onclick="cancel()">Cancelar</button>
+  <button onclick="deleteNews()">Sim</button>
 </div>
 <br />
 <label>Quantidade por pagina:</label>
 <input
-	type="text"
-	value="{{quantity}}"
-	id="limitPerPage"
-	onchange="changeLimit(value)"
+  type="text"
+  value="{{quantity}}"
+  id="limitPerPage"
+  onchange="changeLimit(value)"
 />
 <table>
-	<tr>
-		<th>ID</th>
-		<th>Titulo</th>
-		<th>Assunto</th>
-		<th>Resumo</th>
-		<th>Editar</th>
-		<th>Excluir</th>
-	</tr>
-	{% for news in newsList %}
-	<tr>
-		<td>{{news.id}}</td>
-		<td>{{news.titulo}}</td>
-		<td>{{subjects.get(news.assunto)}}</td>
-		<td>{{news.resumo}}</td>
-		<td>
-			<a href="{{url_for('news.editNews',postId=news.id)}}">Editar</a>
-		</td>
-		<!-- ignorar o erro-->
-		<td><button onclick="handleModal({{news}})">Excluir</button></td>
-	</tr>
-	{% endfor %}
+  <tr>
+    <th>ID</th>
+    <th>Titulo</th>
+    <th>Assunto</th>
+    <th>Resumo</th>
+    <th>Editar</th>
+    <th>Excluir</th>
+  </tr>
+  {% for news in newsList %}
+  <tr>
+    <td>{{news.id}}</td>
+    <td>{{news.titulo}}</td>
+    <td>{{subjects.get(news.assunto)}}</td>
+    <td>{{news.resumo}}</td>
+    <td>
+      <a href="{{url_for('news.editNews',postId=news.id)}}">Editar</a>
+    </td>
+    <!-- ignorar o erro-->
+    <td><button onclick="handleModal({{news}})">Excluir</button></td>
+  </tr>
+  {% endfor %}
 </table>
 <button onclick="changePage({{pageNumber}}-1,{{quantity}})"><-</button>
 <label id="pageLabel">{{pageNumber}}</label>
 <button onclick="changePage({{pageNumber}}+1,{{quantity}})">-></button>
 
 <script>
-	const admBaseUrl = "http://127.0.0.1:5000";
-	const news = {{newsList | tojson}}
-	const currentPage = {{pageNumber | tojson}}
-	let toggleModal = false;
-	let selectedNews = {};
+  const admBaseUrl = "http://127.0.0.1:5000";
+  const news = {{newsList | tojson}}
+  const currentPage = {{pageNumber | tojson}}
+  let toggleModal = false;
+  let selectedNews = {};
 
-	function changePage(newPage, quantity) {
-		if (newPage <= 0) return;
-		if (news.length < quantity && newPage>currentPage) return;
-		window.location = `${admBaseUrl}?pageNumber=${newPage}&limit=${quantity}`;
-	}
+  function changePage(newPage, quantity) {
+  	if (newPage <= 0) return;
+  	if (news.length < quantity && newPage>currentPage) return;
+  	window.location = `${admBaseUrl}?pageNumber=${newPage}&limit=${quantity}`;
+  }
 
-	function changeLimit(value){
-		window.location = `${admBaseUrl}?pageNumber=${currentPage}&limit=${value}`;
-	}
+  function changeLimit(value){
+  	window.location = `${admBaseUrl}?pageNumber=${currentPage}&limit=${value}`;
+  }
 
-	function controlModalVisibility() {
-		const element = document.getElementById("deleteModal");
-		element.style.visibility = toggleModal ? "visible" : "hidden";
-	}
+  function controlModalVisibility() {
+  	const element = document.getElementById("deleteModal");
+  	element.style.visibility = toggleModal ? "visible" : "hidden";
+  }
 
-	function handleModal(news) {
-		selectedNews = news;
-		const titulo = document.getElementById("tituloNoticia");
-		titulo.innerText = selectedNews.titulo;
+  function handleModal(news) {
+  	selectedNews = news;
+  	const titulo = document.getElementById("tituloNoticia");
+  	titulo.innerText = selectedNews.titulo;
 
-		toggleModal = !toggleModal;
-		controlModalVisibility();
-	}
+  	toggleModal = !toggleModal;
+  	controlModalVisibility();
+  }
 
-	function deleteNews() {
-		const baseUrl = "http://127.0.0.1:8080";
+  function deleteNews() {
+  	const baseUrl = "http://127.0.0.1:8080";
 
-		const url = `${baseUrl}/deletenews?id=${selectedNews.id}`;
-		let xhr = new XMLHttpRequest();
-		xhr.open("post", url);
-		xhr.responseType = "json";
-		xhr.send();
+  	const url = `${baseUrl}/deletenews?id=${selectedNews.id}`;
+  	let xhr = new XMLHttpRequest();
+  	xhr.open("delete", url);
+  	xhr.responseType = "json";
+  	xhr.send();
 
-		xhr.onload = (event) => {
-			if (xhr.status !== 200) {
-				alert("erro");
-			} else {
-				toggleModal = false;
-				window.location = admBaseUrl;
-			}
-		};
+  	xhr.onload = (event) => {
+  		if (xhr.status !== 200) {
+  			alert("erro");
+  		} else {
+  			toggleModal = false;
+  			window.location = admBaseUrl;
+  		}
+  	};
 
-		xhr.onerror = (event) => {
-			alert("erro");
-		};
-	}
+  	xhr.onerror = (event) => {
+  		alert("erro");
+  	};
+  }
 
-	function cancel() {
-		toggleModal = false;
-		controlModalVisibility();
-	}
+  function cancel() {
+  	toggleModal = false;
+  	controlModalVisibility();
+  }
 </script>
 {% endblock content %}
