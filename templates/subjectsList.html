@@ -6,100 +6,102 @@
 <label id="failureWarning" style="color: red"></label>
 
 <div class="modal" id="deleteModal" style="visibility: hidden">
-  Excluir?
-  <div id="tituloAssunto"></div>
-  <button onclick="cancel()">Cancelar</button>
-  <button onclick="deleteSubject()">Sim</button>
+	Excluir?
+	<div id="tituloAssunto"></div>
+	<button onclick="cancel()">Cancelar</button>
+	<button onclick="deleteSubject()">Sim</button>
 </div>
 
 <label>Quantidade por pagina:</label>
 <input
-  type="text"
-  value="{{quantity}}"
-  id="limitPerPage"
-  onchange="changeLimit(value)"
+	type="text"
+	value="{{quantity}}"
+	id="limitPerPage"
+	onchange="changeLimit(value)"
 />
 
 <table>
-  <tr>
-    <th>Id</th>
-    <th>Nome</th>
-    <th>Editar</th>
-    <th>Excluir</th>
-  </tr>
-  {% for key,value in subjects.items() %}
-  <tr>
-    <td>{{key}}</td>
-    <td>{{value}}</td>
-    <td>
-      <a href="{{url_for('subjects.editSubject',subjectId=key)}}">Editar</a>
-    </td>
-    <td>
-      <button onclick="handleModal({{key}},'{{value}}')">Excluir</button>
-    </td>
-  </tr>
-  {% endfor %}
+	<tr>
+		<th>Id</th>
+		<th>Nome</th>
+		<th>Editar</th>
+		<th>Excluir</th>
+	</tr>
+	{% for key,value in subjects.items() %}
+	<tr>
+		<td>{{key}}</td>
+		<td>{{value}}</td>
+		<td>
+			<a href="{{url_for('subjects.editSubject',subjectId=key)}}"
+				>Editar</a
+			>
+		</td>
+		<td>
+			<button onclick="handleModal({{key}},'{{value}}')">Excluir</button>
+		</td>
+	</tr>
+	{% endfor %}
 </table>
 <button onclick="changePage({{pageNumber}}-1,{{quantity}})"><-</button>
 <label id="pageLabel">{{pageNumber}}</label>
 <button onclick="changePage({{pageNumber}}+1,{{quantity}})">-></button>
 <script>
-    const urlFromService = {{serviceUrl | tojson}}
-    const thisProjectUrl = {{projectUrl | tojson}}
-  const subjectsList = {{subjects | tojson}}
-  const currentPage = {{pageNumber | tojson}}
-  let toggleModal = false;
-  let selectedSubject = {};
+	  const urlFromService = {{serviceUrl | tojson}}
+	const subjectsList = {{subjects | tojson}}
+	const currentPage = {{pageNumber | tojson}}
+	let toggleModal = false;
+	let selectedSubject = {};
 
-  function changePage(newPage, quantity) {
-  	if (newPage <= 0) return;
-  	if (subjectsList.length < quantity && newPage>currentPage) return;
-  	window.location = `${urlFromService}/subjectslist?pageNumber=${newPage}&limit=${quantity}`;
-  }
+	function changePage(newPage, quantity) {
+	   const subjectsListLength = Object.keys(subjectsList).length
+		if (newPage <= 0) return;
+		if (subjectsListLength < quantity && newPage>currentPage) return;
+		window.location = `${thisProjectUrl}/subjectslist?pageNumber=${newPage}&limit=${quantity}`;
+	}
 
-  function changeLimit(value){
-  	window.location = `${urlFromService}/subjectslist?pageNumber=${currentPage}&limit=${value}`;
-  }
+	function changeLimit(value){
+		window.location = `${thisProjectUrl}/subjectslist?pageNumber=${currentPage}&limit=${value}`;
+	}
 
-  function controlModalVisibility() {
-  	const element = document.getElementById("deleteModal");
-  	element.style.visibility = toggleModal ? "visible" : "hidden";
-  }
+	function controlModalVisibility() {
+		const element = document.getElementById("deleteModal");
+		element.style.visibility = toggleModal ? "visible" : "hidden";
+	}
 
-  function handleModal(id, assunto) {
-  	selectedSubject = { id: id, subjectName: assunto };
-  	const titulo = document.getElementById("tituloAssunto");
-  	titulo.innerText = selectedSubject.subjectName;
+	function handleModal(id, assunto) {
+		selectedSubject = { id: id, subjectName: assunto };
+		const titulo = document.getElementById("tituloAssunto");
+		titulo.innerText = selectedSubject.subjectName;
 
-  	toggleModal = !toggleModal;
-  	controlModalVisibility();
-  }
+		toggleModal = !toggleModal;
+		controlModalVisibility();
+	}
 
-  function setMensagemErro(erro){
-   const errorWarning = document.getElementById("failureWarning")
-   errorWarning.innerHTML=erro
-  }
+	function setMensagemErro(erro){
+	 const errorWarning = document.getElementById("failureWarning")
+	 errorWarning.innerHTML=erro
+	}
 
-  function deleteSubject() {
-  	const url = `${urlFromService}/deletesubject?id=${selectedSubject.id}`;
-  	let xhr = new XMLHttpRequest();
-  	xhr.open("delete", url);
-  	xhr.responseType = "json";
-  	xhr.send();
+	function deleteSubject() {
+		const url = `${urlFromService}/deletesubject?id=${selectedSubject.id}`;
+		let xhr = new XMLHttpRequest();
+		xhr.open("delete", url);
+		xhr.responseType = "json";
+		xhr.send();
 
-  	xhr.onload = (event) => {
-  		if (xhr.status !== 200) {
-  	  this.setMensagemErro(xhr.response.mensagem)
-  		} else {
-  			toggleModal = false;
-  			window.location = `${thisProjectUrl}/subjectslist`;
-  		}
-  	};
+		xhr.onload = (event) => {
+			if (xhr.status !== 200) {
+		  this.setMensagemErro(xhr.response.mensagem)
+			} else {
+				toggleModal = false;
+				window.location = `${thisProjectUrl}/subjectslist`;
+			}
+		};
 
-  	xhr.onerror = (event) => {
-  	  this.setMensagemErro("Ocorreu um erro")
-  	};
-  }
+		xhr.onerror = (event) => {
+		  this.setMensagemErro("Ocorreu um erro")
+		};
+	}
 </script>
 
 {% endblock content %}
