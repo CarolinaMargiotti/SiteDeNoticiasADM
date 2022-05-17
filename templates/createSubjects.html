@@ -23,6 +23,7 @@
   </div>
 </body>
 <script>
+    const urlFromService = {{serviceUrl | tojson}}
   let toggleModal = false;
 
   function controlModalVisibility() {
@@ -49,11 +50,10 @@
   function createSubject() {
     const nomeAssunto = document.getElementById("subjectName").value;
 
-    const baseUrl = "http://127.0.0.1:8080";
     let data = new FormData();
     data.append("subjectName", nomeAssunto);
 
-    const url = `${baseUrl}/createsubject`;
+    const url = `${urlFromService}/createsubject`;
     let xhr = new XMLHttpRequest();
     xhr.open("post", url);
     xhr.responseType = "json";

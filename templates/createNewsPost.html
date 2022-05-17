@@ -33,6 +33,7 @@
 </div>
 
 <script>
+  const urlFromService = {{serviceUrl | tojson}}
   let toggleModal = false;
 
   function controlModalVisibility() {
@@ -64,15 +65,13 @@
     const conteudo = document.getElementById("conteudo").value;
     const resumo = document.getElementById("resumo").value;
 
-    const baseUrl = "http://127.0.0.1:8080";
-
     let data = new FormData();
     data.append("titulo", titulo);
     data.append("assunto", assunto);
     data.append("conteudo", conteudo);
     data.append("resumo", resumo);
 
-    const url = `${baseUrl}/createnews`;
+    const url = `${urlFromService}/createnews`;
     let xhr = new XMLHttpRequest();
     xhr.open("post", url);
     xhr.responseType = "json";

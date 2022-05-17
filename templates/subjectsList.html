@@ -46,21 +46,21 @@
   <button onclick="changePage({{pageNumber}}+1,{{quantity}})">-></button>
 </body>
 <script>
-  const admBaseUrl = "http://127.0.0.1:5000";
+    const urlFromService = {{serviceUrl | tojson}}
+    const thisProjectUrl = {{projectUrl | tojson}}
   const subjectsList = {{subjects | tojson}}
   const currentPage = {{pageNumber | tojson}}
   let toggleModal = false;
   let selectedSubject = {};
 
   function changePage(newPage, quantity) {
-  	console.log(subjectsList);
   	if (newPage <= 0) return;
   	if (subjectsList.length < quantity && newPage>currentPage) return;
-  	window.location = `${admBaseUrl}/subjectslist?pageNumber=${newPage}&limit=${quantity}`;
+  	window.location = `${urlFromService}/subjectslist?pageNumber=${newPage}&limit=${quantity}`;
   }
 
   function changeLimit(value){
-  	window.location = `${admBaseUrl}/subjectslist?pageNumber=${currentPage}&limit=${value}`;
+  	window.location = `${urlFromService}/subjectslist?pageNumber=${currentPage}&limit=${value}`;
   }
 
   function controlModalVisibility() {
@@ -83,9 +83,7 @@
   }
 
   function deleteSubject() {
-  	const baseUrl = "http://127.0.0.1:8080";
-
-  	const url = `${baseUrl}/deletesubject?id=${selectedSubject.id}`;
+  	const url = `${urlFromService}/deletesubject?id=${selectedSubject.id}`;
   	let xhr = new XMLHttpRequest();
   	xhr.open("delete", url);
   	xhr.responseType = "json";
@@ -96,7 +94,7 @@
   	  this.setMensagemErro(xhr.response.mensagem)
   		} else {
   			toggleModal = false;
-  			window.location = "http://127.0.0.1:5000/subjectslist";
+  			window.location = `${thisProjectUrl}/subjectslist`;
   		}
   	};
 

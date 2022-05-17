@@ -1,227 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		{% block head %} {% endblock %}
-	</head>
-	<body>
-		<div class="content">
-			<div class="header">
-				<div class="headerLinks">
-					<!-- ignorar o erro-->
-					<h1
-						class="logo"
-						onclick="window.location.href='{{ url_for( 'news.home' ) }}';"
-					>
-						CarolNews
-					</h1>
-					<div class="menu" id="admLinks" style="visibility: hidden">
-						<a href="{{url_for('news.home')}}">Lista noticias</a>
-						<a href="{{url_for('news.createNews')}}"
-							>Criar noticia</a
-						>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block head %} {% endblock %}
+  </head>
+  <body>
+    <div class="content">
+      <div class="header">
+        <div class="headerLinks">
+          <!-- ignorar o erro-->
+          <h1
+            class="logo"
+            onclick="window.location.href='{{ url_for( 'news.home' ) }}';"
+          >
+            CarolNews
+          </h1>
+          <div class="menu" id="admLinks" style="visibility: hidden">
+            <a href="{{url_for('news.home')}}">Lista noticias</a>
+            <a href="{{url_for('news.createNews')}}">Criar noticia</a>
 
-						<a href="{{url_for('subjects.subjectList')}}"
-							>Lista Assuntos</a
-						>
+            <a href="{{url_for('subjects.subjectList')}}">Lista Assuntos</a>
 
-						<a href="{{url_for('subjects.createSubject')}}"
-							>Criar assunto</a
-						>
-					</div>
-				</div>
+            <a href="{{url_for('subjects.createSubject')}}">Criar assunto</a>
+          </div>
+        </div>
 
-				<div class="headerUser">
-					<label id="username" style="margin-right: 3%"></label>
-					<button
-						id="logout"
-						onclick="clearCookies()"
-						style="visibility: hidden"
-					>
-						Deslogar
-					</button>
-				</div>
-			</div>
-			<hr class="headerHr" />
-			{% block content %} {% endblock %}
-		</div>
-	</body>
+        <div class="headerUser">
+          <label id="username" style="margin-right: 3%"></label>
+          <button
+            id="logout"
+            onclick="clearCookies()"
+            style="visibility: hidden"
+          >
+            Deslogar
+          </button>
+        </div>
+      </div>
+      <hr class="headerHr" />
+      {% block content %} {% endblock %}
+    </div>
+  </body>
 </html>
 <script>
-	function handleHiddenElements() {
-		const admLinksElement = document.getElementById("admLinks");
-		const logoutButtonElement = document.getElementById("logout");
-		admLinksElement.style = "visibility: visible";
-		logoutButtonElement.style = "visibility: visible";
-	}
+     const thisProjectUrl = {{projectUrl | tojson}}
 
-	function setUsername(username) {
-		const usernameLabelElement = document.getElementById("username");
-		usernameLabelElement.innerHTML = username;
-	}
+  function handleHiddenElements() {
+  	const admLinksElement = document.getElementById("admLinks");
+  	const logoutButtonElement = document.getElementById("logout");
+  	admLinksElement.style = "visibility: visible";
+  	logoutButtonElement.style = "visibility: visible";
+  }
 
-	(function checkCookie() {
-		const cookies = document.cookie;
-		const url = window.location.href;
+  function setUsername(username) {
+  	const usernameLabelElement = document.getElementById("username");
+  	usernameLabelElement.innerHTML = username;
+  }
 
-		if (!url.includes("login")) {
-			if (!cookies) {
-				window.location = "http://127.0.0.1:5000/login";
-			}
-			this.handleHiddenElements();
-			this.setUsername(cookies.replace("user=", ""));
-		}
-	})();
+  (function checkCookie() {
+  	const cookies = document.cookie;
+  	const url = window.location.href;
 
-	function clearCookies() {
-		document.cookies = "";
-		window.location = "http://127.0.0.1:5000/login";
-	}
+  	if (!url.includes("login")) {
+  		if (!cookies) {
+  			window.location =`${thisProjectUrl}/login`;
+  		}
+  		this.handleHiddenElements();
+  		this.setUsername(cookies.replace("user=", ""));
+  	}
+  })();
+
+  function clearCookies() {
+  	document.cookies = "";
+  window.location =`${thisProjectUrl}/login`;
+
+  }
 </script>
 <style>
-	table {
-		border-collapse: collapse;
-		width: 100%;
-		text-align: center;
-	}
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+  }
 
-	table td,
-	table th {
-		border: 1px solid #ddd;
-		padding: 2px;
-	}
+  table td,
+  table th {
+    border: 1px solid #ddd;
+    padding: 2px;
+  }
 
-	table th {
-		background-color: #0468aa;
-		color: white;
-	}
+  table th {
+    background-color: #0468aa;
+    color: white;
+  }
 
-	table tr:nth-child(even) {
-		background-color: #f2f2f2;
-	}
+  table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
 
-	table tr:hover {
-		background-color: #ddd;
-	}
-	body {
-		width: auto;
-		margin: auto;
-		max-width: 1100px;
-		font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
-			sans-serif;
-		background-color: #0468aa;
-	}
+  table tr:hover {
+    background-color: #ddd;
+  }
+  body {
+    width: auto;
+    margin: auto;
+    max-width: 1100px;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+      sans-serif;
+    background-color: #0468aa;
+  }
 
-	.content {
-		width: 100%;
-		padding: 2%;
-		background-color: white;
-		height: 100%;
-	}
+  .content {
+    width: 100%;
+    padding: 2%;
+    background-color: white;
+    height: 100%;
+  }
 
-	.subject {
-		font-size: large;
-		color: #0468aa;
-	}
+  .subject {
+    font-size: large;
+    color: #0468aa;
+  }
 
-	hr {
-		width: 100%;
-		background-color: #0468aa;
-		border: 1px solid #0468aa;
-	}
+  hr {
+    width: 100%;
+    background-color: #0468aa;
+    border: 1px solid #0468aa;
+  }
 
-	button {
-		background-color: #0468aa;
-		color: white;
-		border: 1px solid #ddd;
-		padding: 5px;
-		padding-left: 8px;
-		padding-right: 8px;
-		margin-right: 7px;
-		margin-top: 7px;
-		margin-bottom: 7px;
-		border-radius: 4px;
-	}
+  button {
+    background-color: #0468aa;
+    color: white;
+    border: 1px solid #ddd;
+    padding: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-right: 7px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    border-radius: 4px;
+  }
 
-	button:hover {
-		background-color: #0e1b8b;
-	}
+  button:hover {
+    background-color: #0e1b8b;
+  }
 
-	input {
-		margin-left: 10px;
-		margin-right: 10px;
-		margin-bottom: 10px;
-		border: 1px solid #ddd;
-		padding: 4px;
-		border-radius: 4px;
-	}
+  input {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    padding: 4px;
+    border-radius: 4px;
+  }
 
-	a {
-		color: #0468aa;
-	}
+  a {
+    color: #0468aa;
+  }
 
-	select {
-		padding: 4px;
-		margin-left: 10px;
-		margin-bottom: 10px;
-		margin-right: 10px;
-		border: 1px solid #ddd;
-		border-radius: 4px;
-	}
+  select {
+    padding: 4px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
 
-	.headerLinks {
-		width: 100%;
-		display: inline-flex;
-		justify-content: flex-start;
-		align-items: center;
-	}
+  .headerLinks {
+    width: 100%;
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
 
-	.headerUser {
-		display: inline-flex;
-		justify-content: flex-end;
-		align-items: center;
-	}
+  .headerUser {
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
 
-	.header {
-		width: 100%;
-		display: inline-flex;
-		justify-content: space-around;
-		align-items: center;
-	}
+  .header {
+    width: 100%;
+    display: inline-flex;
+    justify-content: space-around;
+    align-items: center;
+  }
 
-	.menu {
-		font-size: medium;
-		padding-left: 3%;
-		font-weight: bold;
-		width: 100%;
-	}
+  .menu {
+    font-size: medium;
+    padding-left: 3%;
+    font-weight: bold;
+    width: 100%;
+  }
 
-	.menu a {
-		padding-right: 3%;
-	}
+  .menu a {
+    padding-right: 3%;
+  }
 
-	.headerHr {
-		width: 100%;
-		height: 5%;
-		background-color: #0468aa;
-		border: 1px solid #0468aa;
-	}
+  .headerHr {
+    width: 100%;
+    height: 5%;
+    background-color: #0468aa;
+    border: 1px solid #0468aa;
+  }
 
-	.logo {
-		padding-right: 5px;
-		user-select: none;
-	}
+  .logo {
+    padding-right: 5px;
+    user-select: none;
+  }
 
-	.modal {
-		position: relative;
-		width: fit-content;
-		height: fit-content;
-		padding: 1%;
-		margin-bottom: 1%;
-		background-color: white;
-		text-align: center;
-		border: 3px solid #0468aa;
-		cursor: pointer;
-	}
+  .modal {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    padding: 1%;
+    margin-bottom: 1%;
+    background-color: white;
+    text-align: center;
+    border: 3px solid #0468aa;
+    cursor: pointer;
+  }
 </style>

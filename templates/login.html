@@ -3,44 +3,47 @@
 {% endblock %} {% extends 'base.html' %} {% block content %}
 <h1>Faça login</h1>
 <form>
-	<label for="usuario">Nome</label>
-	<input type="text" name="usuario" id="usuario" />
-	<br />
-	<label for="senha">Senha</label>
-	<input type="password" name="senha" id="senha" />
-	<br />
-	<input type="button" value="Logar" onclick="onLogin()" />
+  <label for="usuario">Nome</label>
+  <input type="text" name="usuario" id="usuario" />
+  <br />
+  <label for="senha">Senha</label>
+  <input type="password" name="senha" id="senha" />
+  <br />
+  <input type="button" value="Logar" onclick="onLogin()" />
 </form>
 <label id="mensagemErro" style="color: red"></label>
 
 <script>
-	function setMensagemErro() {
-		const element = document.getElementById("mensagemErro");
-		element.innerHTML = `Não foi possivel realizar o login, cheque suas informações`;
-	}
+      const urlFromService = {{serviceUrl | tojson}}
+     const thisProjectUrl = {{projectUrl | tojson}}
 
-	async function onLogin() {
-		const usuario = document.getElementById("usuario").value;
-		const senha = document.getElementById("senha").value;
-		const url = `http://127.0.0.1:8080/login?user=${usuario}&password=${senha}`;
+  function setMensagemErro() {
+  	const element = document.getElementById("mensagemErro");
+  	element.innerHTML = `Não foi possivel realizar o login, cheque suas informações`;
+  }
 
-		let xhr = new XMLHttpRequest();
-		xhr.open("post", url);
-		xhr.responseType = "json";
-		xhr.send();
+  async function onLogin() {
+  	const usuario = document.getElementById("usuario").value;
+  	const senha = document.getElementById("senha").value;
+  	const url = `${urlFromService}/login?user=${usuario}&password=${senha}`;
 
-		xhr.onload = (event) => {
-			if (xhr.status !== 200) {
-				setMensagemErro();
-			} else {
-				document.cookie = `user=${usuario}`;
-				window.location = "http://127.0.0.1:5000/";
-			}
-		};
+  	let xhr = new XMLHttpRequest();
+  	xhr.open("post", url);
+  	xhr.responseType = "json";
+  	xhr.send();
 
-		xhr.onerror = (event) => {
-			setMensagemErro();
-		};
-	}
+  	xhr.onload = (event) => {
+  		if (xhr.status !== 200) {
+  			setMensagemErro();
+  		} else {
+  			document.cookie = `user=${usuario}`;
+  			window.location = thisProjectUrl;
+  		}
+  	};
+
+  	xhr.onerror = (event) => {
+  		setMensagemErro();
+  	};
+  }
 </script>
 {% endblock content %}

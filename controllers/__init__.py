@@ -9,10 +9,28 @@ from controllers.subjects_controller import subjectList as subject_list
 from controllers.subjects_controller import createSubject as create_subject
 from controllers.subjects_controller import editSubject as edit_subject
 
+from models.envVariables import serviceUrl,projectUrl
+
 template_dir = os.path.abspath('sitedenoticiasadm/templates/')
 
 news_bp = Blueprint("news",__name__,template_folder=template_dir)
 subjects_bp = Blueprint("subjects",__name__,template_folder=template_dir)
+
+
+def envVariablesDict():
+    return dict(serviceUrl=serviceUrl,projectUrl=projectUrl)
+
+
+@news_bp.context_processor
+def inject_news_subjects():
+    return envVariablesDict()
+
+
+@subjects_bp.context_processor
+def inject_news_subjects():
+    return envVariablesDict()
+
+
 
 @news_bp.route("/")
 def home():

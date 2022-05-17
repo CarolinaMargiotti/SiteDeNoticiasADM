@@ -26,65 +26,64 @@
 </div>
 
 <script>
-  let toggleModal = false;
-  const originalSubject= {{assunto | tojson }}
+  const urlFromService = {{serviceUrl | tojson}}
+   let toggleModal = false;
+   const originalSubject= {{assunto | tojson }}
 
 
-  function controlModalVisibility() {
-  	const element = document.getElementById("editModal");
-  	element.style.visibility = toggleModal ? "visible" : "hidden";
-  }
+   function controlModalVisibility() {
+   	const element = document.getElementById("editModal");
+   	element.style.visibility = toggleModal ? "visible" : "hidden";
+   }
 
-  function handleModal() {
-  	toggleModal = !toggleModal;
-  	controlModalVisibility();
-  }
-
-
-  function setWarningError() {
-  	const failureWarningElement = document.getElementById("failureWarning");
-  	failureWarningElement.innerHTML = "Houve um erro: ";
-  }
+   function handleModal() {
+   	toggleModal = !toggleModal;
+   	controlModalVisibility();
+   }
 
 
-  function editNews() {
-  	const nome = document.getElementById("titulo").value;
-
-  	const baseUrl = 'http://127.0.0.1:8080'
-
-  let data = new FormData()
-  data.append("id",originalSubject.id)
-  data.append("subjectName",nome)
-
-  	const url = `${baseUrl}/editsubject`;
-  	let xhr = new XMLHttpRequest();
-  	xhr.open("put", url);
-  	xhr.responseType = "json";
-  	xhr.send(data);
-
-  	xhr.onload = (event) => {
-  		if (xhr.status !== 200) {
-  			this.setWarningError();
-  		} else {
-  			toggleModal = false;
-  			controlModalVisibility();
-  			const creationWarningElement =
-  				document.getElementById("creationWarning");
-  			creationWarningElement.innerHTML = "Editado com sucesso";
-  		}
-  	};
-
-  	xhr.onerror = (event) => {
-  		this.setWarningError();
-  	};
-  }
-
-  function cancel() {
-  	document.getElementById("nome").value = originalSubject["nome"];
+   function setWarningError() {
+   	const failureWarningElement = document.getElementById("failureWarning");
+   	failureWarningElement.innerHTML = "Houve um erro: ";
+   }
 
 
-  	toggleModal = false;
-  	controlModalVisibility();
-  }
+   function editNews() {
+   	const nome = document.getElementById("titulo").value;
+
+   let data = new FormData()
+   data.append("id",originalSubject.id)
+   data.append("subjectName",nome)
+
+   	const url = `${urlFromService}/editsubject`;
+   	let xhr = new XMLHttpRequest();
+   	xhr.open("put", url);
+   	xhr.responseType = "json";
+   	xhr.send(data);
+
+   	xhr.onload = (event) => {
+   		if (xhr.status !== 200) {
+   			this.setWarningError();
+   		} else {
+   			toggleModal = false;
+   			controlModalVisibility();
+   			const creationWarningElement =
+   				document.getElementById("creationWarning");
+   			creationWarningElement.innerHTML = "Editado com sucesso";
+   		}
+   	};
+
+   	xhr.onerror = (event) => {
+   		this.setWarningError();
+   	};
+   }
+
+   function cancel() {
+   	document.getElementById("nome").value = originalSubject["nome"];
+
+
+   	toggleModal = false;
+   	controlModalVisibility();
+   }
 </script>
 {% endblock content %}

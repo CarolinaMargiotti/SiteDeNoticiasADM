@@ -35,72 +35,71 @@
 </div>
 
 <script>
-  let toggleModal = false;
-  const originalNews= {{news | tojson }}
+  const urlFromService = {{serviceUrl | tojson}}
+   let toggleModal = false;
+   const originalNews= {{news | tojson }}
 
-  function controlModalVisibility() {
-  	const element = document.getElementById("editModal");
-  	element.style.visibility = toggleModal ? "visible" : "hidden";
-  }
+   function controlModalVisibility() {
+   	const element = document.getElementById("editModal");
+   	element.style.visibility = toggleModal ? "visible" : "hidden";
+   }
 
-  function handleModal() {
-  	toggleModal = !toggleModal;
-  	controlModalVisibility();
-  }
-
-
-  function setWarningError() {
-  	const failureWarningElement = document.getElementById("failureWarning");
-  	failureWarningElement.innerHTML = "Houve um erro: ";
-  }
+   function handleModal() {
+   	toggleModal = !toggleModal;
+   	controlModalVisibility();
+   }
 
 
-  function editNews() {
-  	const titulo = document.getElementById("titulo").value;
-  	const assunto = document.getElementById("assunto").value;
-  	const conteudo = document.getElementById("conteudo").value;
-  	const resumo = document.getElementById("resumo").value;
+   function setWarningError() {
+   	const failureWarningElement = document.getElementById("failureWarning");
+   	failureWarningElement.innerHTML = "Houve um erro: ";
+   }
 
-  	const baseUrl = 'http://127.0.0.1:8080'
 
-  	let data = new FormData()
-  	data.append("id",originalNews.id)
-  	data.append("titulo",titulo)
-  	data.append("assunto",assunto)
-  	data.append("conteudo",conteudo)
-  	data.append("resumo",resumo)
+   function editNews() {
+   	const titulo = document.getElementById("titulo").value;
+   	const assunto = document.getElementById("assunto").value;
+   	const conteudo = document.getElementById("conteudo").value;
+   	const resumo = document.getElementById("resumo").value;
 
-  	const url = `${baseUrl}/editnews`;
-  	let xhr = new XMLHttpRequest();
-  	xhr.open("put", url);
-  	xhr.responseType = "json";
-  	xhr.send(data);
+   	let data = new FormData()
+   	data.append("id",originalNews.id)
+   	data.append("titulo",titulo)
+   	data.append("assunto",assunto)
+   	data.append("conteudo",conteudo)
+   	data.append("resumo",resumo)
 
-  	xhr.onload = (event) => {
-  		if (xhr.status !== 200) {
-  			this.setWarningError();
-  		} else {
-  			toggleModal = false;
-  			controlModalVisibility();
-  			const creationWarningElement =
-  				document.getElementById("creationWarning");
-  			creationWarningElement.innerHTML = "Editado com sucesso";
-  		}
-  	};
+   	const url = `${urlFromService}/editnews`;
+   	let xhr = new XMLHttpRequest();
+   	xhr.open("put", url);
+   	xhr.responseType = "json";
+   	xhr.send(data);
 
-  	xhr.onerror = (event) => {
-  		this.setWarningError();
-  	};
-  }
+   	xhr.onload = (event) => {
+   		if (xhr.status !== 200) {
+   			this.setWarningError();
+   		} else {
+   			toggleModal = false;
+   			controlModalVisibility();
+   			const creationWarningElement =
+   				document.getElementById("creationWarning");
+   			creationWarningElement.innerHTML = "Editado com sucesso";
+   		}
+   	};
 
-  function cancel() {
-  	document.getElementById("titulo").value = originalNews["titulo"];
-  	document.getElementById("assunto").value = originalNews["assunto"];
-  	document.getElementById("conteudo").value = originalNews["conteudo"];
-  	document.getElementById("resumo").value = originalNews['resumo'] ;
+   	xhr.onerror = (event) => {
+   		this.setWarningError();
+   	};
+   }
 
-  	toggleModal = false;
-  	controlModalVisibility();
-  }
+   function cancel() {
+   	document.getElementById("titulo").value = originalNews["titulo"];
+   	document.getElementById("assunto").value = originalNews["assunto"];
+   	document.getElementById("conteudo").value = originalNews["conteudo"];
+   	document.getElementById("resumo").value = originalNews['resumo'] ;
+
+   	toggleModal = false;
+   	controlModalVisibility();
+   }
 </script>
 {% endblock content %}

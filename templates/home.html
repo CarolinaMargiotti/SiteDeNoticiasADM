@@ -45,7 +45,7 @@
 <button onclick="changePage({{pageNumber}}+1,{{quantity}})">-></button>
 
 <script>
-  const admBaseUrl = "http://127.0.0.1:5000";
+  const urlFromService = {{serviceUrl | tojson}}
   const news = {{newsList | tojson}}
   const currentPage = {{pageNumber | tojson}}
   let toggleModal = false;
@@ -54,11 +54,11 @@
   function changePage(newPage, quantity) {
   	if (newPage <= 0) return;
   	if (news.length < quantity && newPage>currentPage) return;
-  	window.location = `${admBaseUrl}?pageNumber=${newPage}&limit=${quantity}`;
+  	window.location = `${urlFromService}?pageNumber=${newPage}&limit=${quantity}`;
   }
 
   function changeLimit(value){
-  	window.location = `${admBaseUrl}?pageNumber=${currentPage}&limit=${value}`;
+  	window.location = `${urlFromService}?pageNumber=${currentPage}&limit=${value}`;
   }
 
   function controlModalVisibility() {
@@ -76,8 +76,6 @@
   }
 
   function deleteNews() {
-  	const baseUrl = "http://127.0.0.1:8080";
-
   	const url = `${baseUrl}/deletenews?id=${selectedNews.id}`;
   	let xhr = new XMLHttpRequest();
   	xhr.open("delete", url);
@@ -89,7 +87,7 @@
   			alert("erro");
   		} else {
   			toggleModal = false;
-  			window.location = admBaseUrl;
+  			window.location = urlFromService;
   		}
   	};
 
