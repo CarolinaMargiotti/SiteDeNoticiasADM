@@ -3,6 +3,9 @@
 {% endblock %} {% extends 'base.html' %} {% block content %}
 <body>
   <h1>Assuntos</h1>
+
+  <label id="failureWarning" style="color: red"></label>
+
   <div class="modal" id="deleteModal" style="visibility: hidden">
     Excluir?
     <div id="tituloAssunto"></div>
@@ -74,6 +77,11 @@
   	controlModalVisibility();
   }
 
+  function setMensagemErro(erro){
+   const errorWarning = document.getElementById("failureWarning")
+   errorWarning.innerHTML=erro
+  }
+
   function deleteSubject() {
   	const baseUrl = "http://127.0.0.1:8080";
 
@@ -85,7 +93,7 @@
 
   	xhr.onload = (event) => {
   		if (xhr.status !== 200) {
-  			alert("erro");
+  	  this.setMensagemErro(xhr.response.mensagem)
   		} else {
   			toggleModal = false;
   			window.location = "http://127.0.0.1:5000/subjectslist";
@@ -93,7 +101,7 @@
   	};
 
   	xhr.onerror = (event) => {
-  		alert("erro");
+  	  this.setMensagemErro("Ocorreu um erro")
   	};
   }
 </script>
